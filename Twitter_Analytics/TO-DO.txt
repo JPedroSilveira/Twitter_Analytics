@@ -1,0 +1,3 @@
+// Lista vs arvores
+// Processamento vs memoria
+// Contador de Tempo

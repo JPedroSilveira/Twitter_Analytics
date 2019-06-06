@@ -1,0 +1,16 @@
+﻿  TwitterAnalytics.c
+c:\users\jpedr\desktop\twitter_analytics\twitter_analytics\twitteranalytics.c(27): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.16299.0\ucrt\stdio.h(207): note: consulte a declaração de 'fopen'
+c:\users\jpedr\desktop\twitter_analytics\twitter_analytics\twitteranalytics.c(28): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.16299.0\ucrt\stdio.h(207): note: consulte a declaração de 'fopen'
+c:\users\jpedr\desktop\twitter_analytics\twitter_analytics\twitteranalytics.c(41): warning C4474: 'scanf': excesso de argumentos transmitidos para cadeia de caracteres de formato
+  c:\users\jpedr\desktop\twitter_analytics\twitter_analytics\twitteranalytics.c(41): note: espaços reservados e seus parâmetros esperam 0 argumentos variadic, mas 1 foram fornecidos
+c:\users\jpedr\desktop\twitter_analytics\twitter_analytics\twitteranalytics.c(41): warning C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.16299.0\ucrt\stdio.h(1272): note: consulte a declaração de 'scanf'
+c:\users\jpedr\desktop\twitter_analytics\twitter_analytics\twitteranalytics.c(25): warning C4101: 'OUTPUT': variável local não referenciada
+  File.c
+c:\users\jpedr\desktop\twitter_analytics\twitter_analytics\source\file.c(4): warning C4026: função declarada com lista de parâmetros formais
+c:\users\jpedr\desktop\twitter_analytics\twitter_analytics\source\file.c(105): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.16299.0\ucrt\string.h(136): note: consulte a declaração de 'strcpy'
+  Gerando Código...
+  Twitter_Analytics.vcxproj -> C:\Users\jpedr\Desktop\Twitter_Analytics\Debug\Twitter_Analytics.exe
