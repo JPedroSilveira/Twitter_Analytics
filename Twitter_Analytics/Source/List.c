@@ -13,7 +13,7 @@ void* List_Get(List* self, int index) {
 }
 
 //Adiciona um novo item a uma lista existente
-List* List_Add(List* list, void* data) {
+void List_Add(List* list, void* data) {
 	Node* node = malloc(sizeof(Node));
 	node->data = data;
 	node->next = NULL;
@@ -30,8 +30,6 @@ List* List_Add(List* list, void* data) {
 		}
 		listNode->next = node;
 	}
-
-	return list;
 }
 
 //Inicializa uma nova lista

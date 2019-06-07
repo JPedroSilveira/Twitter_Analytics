@@ -115,12 +115,14 @@
     <Text Include="Arquivos de Recurso\file2.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Header\BinaryTree.c" />
     <ClCompile Include="Source\File.c" />
     <ClCompile Include="Source\List.c" />
     <ClCompile Include="Source\Tweet.c" />
     <ClCompile Include="TwitterAnalytics.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header\BinaryTree.h" />
     <ClInclude Include="Header\Tweet.h" />
     <ClInclude Include="Header\File.h" />
     <ClInclude Include="Header\List.h" />
