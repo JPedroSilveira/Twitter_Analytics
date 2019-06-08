@@ -1,0 +1,20 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+#Debug
+/Debug
+/Twitter_Analytics/bin
+/Twitter_Analytics/Debug
+/Twitter_Analytics/obj
+/Twitter_Analytics/x64
+
+#CodeBlocks
+/Twitter_Analytics/Twitter_Analytics.cbp
+
+#VisualStudio
+/Twitter_Analytics/Twitter_Analytics.depend
+/Twitter_Analytics/Twitter_Analytics.layout
+/Twitter_Analytics/Twitter_Analytics.vcxproj
+/Twitter_Analytics/Twitter_Analytics.vcxproj.filters
+/.vs
+/Twitter_Analytics.layout
+/Twitter_Analytics.sln
