@@ -24,10 +24,10 @@ int main(int argc, char *argv[]) {
 
 	FILE *file1, *file2, *OUTPUT;
 
-	file1 = fopen(argv[1], "r");
-	file2 = fopen(argv[2], "r");
-	//file1 = fopen("file1.txt", "r");
-	//file2 = fopen("file2.txt", "r");
+	//file1 = fopen(argv[1], "r");
+	//file2 = fopen(argv[2], "r");
+	file1 = fopen("file1.txt", "r");
+	file2 = fopen("file2.txt", "r");
 
 	if (filesError(file1, file2)) return 0;
 	

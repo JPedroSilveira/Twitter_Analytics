@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "./List.h"
 #include "./Tweet.h"
 
 #define OP_NAME_MAX_CHAR_LENGTH 30

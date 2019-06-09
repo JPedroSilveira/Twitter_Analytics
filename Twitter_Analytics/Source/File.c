@@ -76,7 +76,7 @@ void readTweets(FILE * file)
 	char readChar;
 	int countChar, countHashtagChar = -1, countMentionChar = -1, number = 0;
 	while ((readChar = getc(file)) != EOF) {
-		Tweet* tweet = Tweet_New();
+		Tweet* tweet = TweetP_New();
 		User* user;
 		Hashtag* hashtag;
 		User* userMention;
