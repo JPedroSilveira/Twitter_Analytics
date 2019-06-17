@@ -1,0 +1,3 @@
+/Users/jc/Desktop/TrabFinal/Twitter_Analytics/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/jc/Desktop/TrabFinal/Twitter_Analytics/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/jc/Desktop/TrabFinal/Twitter_Analytics/cmake-build-debug/CMakeFiles/Twitter_Analytics.dir

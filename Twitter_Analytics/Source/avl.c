@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h> 
-#include "avl.h"
+#include "../Header/avl.h"
 // Functions
 // C program to insert a node in AVL tree 
 
