@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 #include "Header/File.h"
-#include "Header/generic.h"
-#include "Header/avl.h"
+#include "Header/Generic.h"
+#include "Header/AVL.h"
 
 int main(int argc, char *argv[]) {
     /*Teste Lista
@@ -41,6 +41,6 @@ int main(int argc, char *argv[]) {
 
 
     testaFuncoesGenericas();
-//    testaAvl();
+    avl_testa();
     return 0;
 }
