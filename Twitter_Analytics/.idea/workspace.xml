@@ -12,7 +12,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c0d9d52-4f5b-4ed6-b88b-00b0507d01af" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Header/BinaryTree.c" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/.TwitterAnalytics.c.swp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/Twitter_Analytics.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Header/generic.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/.avl.c.swp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/generic.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Twitter_Analytics" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Header/BinaryTree.c" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BinaryTree.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Header/avl.h" beforeDir="false" afterPath="$PROJECT_DIR$/Header/avl.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/avl.c" beforeDir="false" afterPath="$PROJECT_DIR$/Source/avl.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TwitterAnalytics.c" beforeDir="false" afterPath="$PROJECT_DIR$/TwitterAnalytics.c" afterDir="false" />
@@ -72,8 +84,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="27" lean-forward="true" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
+            <state relative-caret-position="45">
+              <caret line="3" column="24" lean-forward="true" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -176,12 +188,12 @@
       <option name="presentableId" value="Default" />
       <updated>1560396360226</updated>
       <workItem from="1560396361548" duration="1342000" />
-      <workItem from="1560737441530" duration="972000" />
+      <workItem from="1560737441530" duration="1079000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2314000" />
+    <option name="totallyTimeSpent" value="2421000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -195,14 +207,14 @@
   <component name="ToolWindowManager">
     <frame x="13" y="23" width="1427" height="877" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2534296" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2534296" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Messages" visible="true" weight="0.3299363" />
+      <window_info anchor="bottom" id="Messages" weight="0.3299363" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3299363" />
@@ -233,8 +245,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="27" lean-forward="true" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
+        <state relative-caret-position="45">
+          <caret line="3" column="24" lean-forward="true" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
         </state>
       </provider>
     </entry>
