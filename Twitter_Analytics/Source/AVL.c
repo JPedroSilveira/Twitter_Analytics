@@ -125,7 +125,7 @@ avlTreeNode *avl_insert(avlTreeNode* node, int key) {
 // A utility function to print preorder traversal 
 // of the tree. 
 // The function also prints height of every node 
-void preOrder(avlTreeNode avl_*root) { 
+void avl_preOrder(avlTreeNode *root) { 
     if(root != NULL) { 
         printf("%d ", root->key); 
         preOrder(root->left); 

@@ -13,5 +13,5 @@ avlTreeNode* avl+newNode(int key);
 avlTreeNode *avl_rightRotate( avlTreeNode *y);
 avlTreeNode *avl_leftRotate( avlTreeNode *x);
 int avl_getBalance(avlTreeNode *N);
-void preOrder(avlTreeNode *root);
-void testaAvl();
+void avl_preOrder(avlTreeNode *root);
+void avl_testa();
