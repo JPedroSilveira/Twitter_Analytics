@@ -60,21 +60,32 @@ List* readArgumentsForOp(FILE *file) {
 		}
 		else {
 			strcpy(arguments->name, "");
-			letter = getc(file);
-			count = 0;
-			number = 0;
-			while (letter != '\n' && letter != ' ') { //Lê até achar o final
-				number += ((letter - 48) * pow(10, count)); //Converte char ASCII para int e eleva para sua casa decimal somando ao valor total
-				letter = getc(file);
-				count++;
-			}
-			arguments->number = number;
+			arguments->number = readInt(file);
 		}
 
 		argumentsList->Add(argumentsList, arguments);
 	}
 
 	return argumentsList;
+}
+
+int readInt(FILE *file) {
+	int count = 0;
+	return readIntAux(file, &count);
+}
+
+int readIntAux(FILE *file, int *count) {
+	char character = getc(file);
+	int number;
+	if (character != '\n' && character != ' ') { //Lê até achar o final
+		number = readIntAux(file, count); //Chama recursivamente até o último caracter
+		number += ((character - 48) * pow(10, *count)); //Converte char ASCII para int e eleva para sua casa decimal somando ao valor total
+		*count = *count + 1; //Soma o contador para cada nova casa decimal
+		return number; //Retorna o número parcial
+	}
+	else {
+		return 0;
+	}
 }
 
 void readTweets(FILE * file)
