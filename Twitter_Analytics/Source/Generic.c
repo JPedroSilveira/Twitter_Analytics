@@ -18,7 +18,7 @@ void push(genericNode** head_ref, void *new_data, size_t data_size) {
 	// Copy contents of new_data to newly allocated memory. 
 	// Assumption: char takes 1 byte. 
 	int i; 
-	for (i=0; i < data_size; i++) *(char *) (new_node->data + i) = *(char *)(new_data + i); 
+	for (i=0; i < data_size; i++) *((char *)new_node->data + i) = *((char *)new_data + i);
 
 	// Change head pointer as new node is added at the beginning 
 	(*head_ref) = new_node; 
@@ -50,7 +50,7 @@ void printChar(void *c){
 
 void printString(void *s) {
     for (int i = 0; i < 25; i++) { // Arrumar para uma variavel ao inves de 25
-        printf("%c",*(char *) (s + i));
+        printf("%c",*((char *)s + i));
 //        printf("%c",*(char *)(s + 4));
     }
 }

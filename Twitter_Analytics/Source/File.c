@@ -60,7 +60,14 @@ List* readArgumentsForOp(FILE *file) {
 		}
 		else {
 			strcpy(arguments->name, "");
-			number = getc(file);
+			letter = getc(file);
+			count = 0;
+			number = 0;
+			while (letter != '\n' && letter != ' ') { //Lê até achar o final
+				number += ((letter - 48) * pow(10, count)); //Converte char ASCII para int e eleva para sua casa decimal somando ao valor total
+				letter = getc(file);
+				count++;
+			}
 			arguments->number = number;
 		}
 
