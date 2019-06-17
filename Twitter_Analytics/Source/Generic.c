@@ -87,10 +87,10 @@ int testaFuncoesGenericas() {
     start = NULL;
     char *arr4[4];
 
-    arr4[0] = "bah\n";
-    arr4[1] = "yadda\n";
-    arr4[2] = "lol\n";
-    arr4[3] = "string4\n";
+    arr4[0] = "ba h";
+    arr4[1] = "yadd a";
+    arr4[2] = "lo l";
+    arr4[3] = "string 4";
     
     // Testes para saber como definir o tamanho ideal de um array de strings
     printf("\n\nSize of arr4[0] = %lu\n",sizeof(arr4[0]));
