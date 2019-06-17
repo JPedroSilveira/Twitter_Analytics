@@ -2,7 +2,7 @@
 #include <stdio.h> 
 #include <string.h>
 #include <stdlib.h> 
-#include "../Header/generic.h"
+#include "../Header/Generic.h"
 
 
 /* Function to add a node at the beginning of Linked List. 
