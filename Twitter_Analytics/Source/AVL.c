@@ -6,20 +6,20 @@
 // C program to insert a node in AVL tree 
 
 // A utility function to get the height of the tree 
-int height(avlTreeNode *N) { 
+int avl_height(avlTreeNode *N) { 
     if (N == NULL) 
         return 0; 
     return N->height; 
 } 
 
 // A utility function to get maximum of two integers 
-int max(int a, int b) { 
+int maxInt(int a, int b) { 
     return (a > b)? a : b; 
 } 
 
 /* Helper function that allocates a new node with the given key and 
    NULL left and right pointers. */
-avlTreeNode *newNode(int key) { 
+avlTreeNode *avl_newNode(int key) { 
     avlTreeNode* node = (struct s_avlNode*) 
     malloc(sizeof(struct s_avlNode)); 
     node->key = key; 
@@ -31,7 +31,7 @@ avlTreeNode *newNode(int key) {
 
 // A utility function to right rotate subtree rooted with y 
 // See the diagram given above. 
-avlTreeNode *rightRotate(avlTreeNode *y) { 
+avlTreeNode *avl_rightRotate(avlTreeNode *y) { 
     avlTreeNode *x = y->left; 
     avlTreeNode *T2 = x->right; 
 
@@ -49,7 +49,7 @@ avlTreeNode *rightRotate(avlTreeNode *y) {
 
 // A utility function to left rotate subtree rooted with x 
 // See the diagram given above. 
-avlTreeNode *leftRotate(avlTreeNode *x) { 
+avlTreeNode *avl_leftRotate(avlTreeNode *x) { 
     avlTreeNode *y = x->right; 
     avlTreeNode *T2 = y->left; 
 
@@ -66,7 +66,7 @@ avlTreeNode *leftRotate(avlTreeNode *x) {
 } 
 
 // Get Balance factor of node N 
-int getBalance(avlTreeNode *N) { 
+int avl_getBalance(avlTreeNode *N) { 
     if (N == NULL) 
         return 0; 
     return height(N->left) - height(N->right); 
@@ -74,7 +74,7 @@ int getBalance(avlTreeNode *N) {
 
 // Recursive function to insert a key in the subtree rooted 
 // with node and returns the new root of the subtree. 
-avlTreeNode* insert(avlTreeNode* node, int key) { 
+avlTreeNode *avl_insert(avlTreeNode* node, int key) { 
     /* 1. Perform the normal BST insertion */
     if (node == NULL) 
         return(newNode(key)); 
@@ -125,7 +125,7 @@ avlTreeNode* insert(avlTreeNode* node, int key) {
 // A utility function to print preorder traversal 
 // of the tree. 
 // The function also prints height of every node 
-void preOrder(avlTreeNode *root) { 
+void preOrder(avlTreeNode avl_*root) { 
     if(root != NULL) { 
         printf("%d ", root->key); 
         preOrder(root->left); 
@@ -133,7 +133,7 @@ void preOrder(avlTreeNode *root) {
     } 
 } 
 
-void testaAVL() { 
+void avl_testa() { 
     avlTreeNode *root = NULL;
 
     /* Constructing tree given in the above figure */

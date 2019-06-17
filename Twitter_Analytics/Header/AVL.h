@@ -6,13 +6,12 @@ typedef struct s_avlNode {
 	int height; 
 } avlTreeNode; 
 
-int height(avlTreeNode *N);
-int max(int a, int b);
-avlTreeNode* insert( avlTreeNode *node, int key);
-avlTreeNode* newNode(int key);
-avlTreeNode *rightRotate( avlTreeNode *y);
-avlTreeNode *leftRotate( avlTreeNode *x);
-int getBalance(avlTreeNode *N);
-avlTreeNode* insert(avlTreeNode* node, int key);
+int avl_height(avlTreeNode *N);
+int maxInt(int a, int b);
+avlTreeNode* avl_insert(avlTreeNode *node, int key);
+avlTreeNode* avl+newNode(int key);
+avlTreeNode *avl_rightRotate( avlTreeNode *y);
+avlTreeNode *avl_leftRotate( avlTreeNode *x);
+int avl_getBalance(avlTreeNode *N);
 void preOrder(avlTreeNode *root);
 void testaAvl();
