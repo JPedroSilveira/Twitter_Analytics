@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h> 
-#include "avl.h"
+#include "../Header/avl.h"
+
 // Functions
 // C program to insert a node in AVL tree 
 
@@ -19,8 +20,8 @@ int max(int a, int b) {
 /* Helper function that allocates a new node with the given key and 
    NULL left and right pointers. */
 avlTreeNode *newNode(int key) { 
-    avlTreeNode* node = (struct s_Node*) 
-    malloc(sizeof(struct s_Node)); 
+    avlTreeNode* node = (struct s_avlNode*) 
+    malloc(sizeof(struct s_avlNode)); 
     node->key = key; 
     node->left = NULL; 
     node->right = NULL; 
@@ -131,3 +132,21 @@ void preOrder(avlTreeNode *root) {
         preOrder(root->right); 
     } 
 } 
+
+void testaAVL() { 
+    avlTreeNode *root = NULL;
+
+    /* Constructing tree given in the above figure */
+    root = insert(root, 10);
+    root = insert(root, 20);
+    root = insert(root, 30);
+    root = insert(root, 40);
+    root = insert(root, 50);
+    root = insert(root, 25);
+
+
+    preOrder(root);
+
+} 
+
+

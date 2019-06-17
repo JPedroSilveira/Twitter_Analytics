@@ -1,8 +1,8 @@
 // An AVL tree node 
-typedef struct s_Node { 
+typedef struct s_avlNode { 
 	int key; 
-	struct s_Node *left; 
-	struct s_Node *right; 
+	struct s_avlNode *left; 
+	struct s_avlNode *right; 
 	int height; 
 } avlTreeNode; 
 
@@ -15,3 +15,4 @@ avlTreeNode *leftRotate( avlTreeNode *x);
 int getBalance(avlTreeNode *N);
 avlTreeNode* insert(avlTreeNode* node, int key);
 void preOrder(avlTreeNode *root);
+void testaAvl();

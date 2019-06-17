@@ -1,5 +1,5 @@
-#include "../Header/BinaryTree.h"
-
+//#include "../Header/BinaryTree.h"
+/*
 //Inicializa um novo nodo
 BTreeNode* BTreeNode_New()
 {
@@ -104,3 +104,4 @@ BinaryTree* BinaryTree_User_New()
 }
 
 
+*/
