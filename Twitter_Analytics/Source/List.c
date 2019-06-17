@@ -12,7 +12,7 @@ void* List_Get(List* self, int index) {
 	return node->data;
 }
 
-//Adiciona um novo item a uma lista existente
+//Adiciona um novo item a uma lista existente // Na primeira etapa de leitura do arquivos pode deixar por ordem de insercao na lista e depois ordenada na ABP
 void List_Add(List* list, void* data) {
 	Node* node = malloc(sizeof(Node));
 	node->data = data;
@@ -40,11 +40,3 @@ List* List_New() {
 	list->Get = List_Get;
 	return list;
 }
-
-
-
-
-
-
-
-

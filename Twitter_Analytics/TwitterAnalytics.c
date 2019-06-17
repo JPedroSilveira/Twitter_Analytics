@@ -32,13 +32,11 @@ int main(int argc, char *argv[]) {
 	if (filesError(file1, file2)) return 0;
 	
 	List* argumentsForOpList = readArgumentsForOp(file2);
-
-	ArgumentsForOp* teste = argumentsForOpList->Get(argumentsForOpList, 6);
+	ArgumentsForOp* teste = argumentsForOpList->Get(argumentsForOpList, 0);
 	printf("%c\n", teste->opChar);
 	printf("%d\n", teste->number);
 	printf("%s\n", teste->name);
 
-	scanf("oi", NULL);
 
 	return 0;
 }

@@ -1,15 +1,5 @@
 #include "../Header/File.h"
 
-ArgumentsForOp ArgumentsForOp_New()
-{
-	ArgumentsForOp argumentsForOp;
-	argumentsForOp.opChar = ' ';
-	argumentsForOp.number = 0;
-	argumentsForOp.name[0] = '\0'; //Inicializa a string vazia
-
-	return argumentsForOp;
-}
-
 int argumentsError(int argc) {
 	// Recebe a quantidade de parametros na chamada do programa
 	// Caso seja maior que 3 (a.out, arquivo1, arquivo2) nao executa o programa
@@ -22,10 +12,19 @@ int argumentsError(int argc) {
 
 int filesError(FILE *input1, FILE *input2) {
 	if (!input1 || !input2) { // Caso ocorra erro na abertura de um dos arquivos
-		printf("Parametros inválidos\n");
+		printf("Parametros invalidos\n");
 		return 1;
 	}
 	else return 0;
+}
+
+ArgumentsForOp ArgumentsForOp_New() {
+	ArgumentsForOp argumentsForOp;
+	argumentsForOp.opChar = ' ';
+	argumentsForOp.number = 0;
+	argumentsForOp.name[0] = '\0'; //Inicializa a string vazia
+
+	return argumentsForOp;
 }
 
 List* readArgumentsForOp(FILE *file) {
@@ -176,7 +175,7 @@ void readTweets(FILE * file)
 
 		//TO-DO: Adicionar Tweet na sua arvore
 	}
-	return NULL;
+//	return NULL; Funcao void
 }
 
 void exFile2(FILE *input2) {
