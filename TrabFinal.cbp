@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="TrabFinal"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/jc/Desktop/TrabFinal"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/jc/Desktop/TrabFinal"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/jc/Desktop/TrabFinal"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Twitter_Analytics">
+				<Option output="/Users/jc/Desktop/TrabFinal/Twitter_Analytics" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jc/Desktop/TrabFinal"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Header"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 Twitter_Analytics"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Twitter_Analytics/fast">
+				<Option output="/Users/jc/Desktop/TrabFinal/Twitter_Analytics" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jc/Desktop/TrabFinal"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Header"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 Twitter_Analytics/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/jc/Desktop/TrabFinal/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Header/AVL.h">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Header/File.h">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Header/Generic.h">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Header/List.h">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Header/OPES.h">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Header/Tweet.h">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Source/AVL.c">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Source/BinaryTree.c">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Source/File.c">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Source/Generic.c">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Source/List.c">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/Source/Tweet.c">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/Twitter_Analytics/TwitterAnalytics.c">
+			<Option target="Twitter_Analytics"/>
+		</Unit>
+		<Unit filename="/Users/jc/Desktop/TrabFinal/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

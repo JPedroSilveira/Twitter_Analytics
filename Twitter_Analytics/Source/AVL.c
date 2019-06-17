@@ -1,6 +1,6 @@
  #include <stdio.h>
 #include <stdlib.h> 
-#include "../Header/avl.h"
+#include "../Header/AVL.h"
 
 // Functions
 // C program to insert a node in AVL tree 
@@ -12,7 +12,7 @@ int avl_height(avlTreeNode *N) {
     return N->height; 
 } 
 
-// A utility function to get maximum of two integers 
+// A utility function to get maximumInt of two integers 
 int maxInt(int a, int b) { 
     return (a > b)? a : b; 
 } 
@@ -39,9 +39,9 @@ avlTreeNode *avl_rightRotate(avlTreeNode *y) {
     x->right = y; 
     y->left = T2; 
 
-    // Update heights 
-    y->height = max(height(y->left), height(y->right))+1; 
-    x->height = max(height(x->left), height(x->right))+1; 
+    // Update avl_heights 
+    y->height = maxInt(avl_height(y->left), avl_height(y->right))+1; 
+    x->height = maxInt(avl_height(x->left), avl_height(x->right))+1; 
 
     // Return new root 
     return x; 
@@ -58,8 +58,8 @@ avlTreeNode *avl_leftRotate(avlTreeNode *x) {
     x->right = T2; 
 
     // Update heights 
-    x->height = max(height(x->left), height(x->right))+1; 
-    y->height = max(height(y->left), height(y->right))+1; 
+    x->height = maxInt(avl_height(x->left), avl_height(x->right))+1; 
+    y->height = maxInt(avl_height(y->left), avl_height(y->right))+1; 
 
     // Return new root 
     return y; 
@@ -69,7 +69,7 @@ avlTreeNode *avl_leftRotate(avlTreeNode *x) {
 int avl_getBalance(avlTreeNode *N) { 
     if (N == NULL) 
         return 0; 
-    return height(N->left) - height(N->right); 
+    return avl_height(N->left) - avl_height(N->right); 
 } 
 
 // Recursive function to insert a key in the subtree rooted 
@@ -77,45 +77,45 @@ int avl_getBalance(avlTreeNode *N) {
 avlTreeNode *avl_insert(avlTreeNode* node, int key) { 
     /* 1. Perform the normal BST insertion */
     if (node == NULL) 
-        return(newNode(key)); 
+        return(avl_newNode(key)); 
 
     if (key < node->key) 
-        node->left = insert(node->left, key); 
+        node->left = avl_insert(node->left, key); 
     else if (key > node->key) 
-        node->right = insert(node->right, key); 
+        node->right = avl_insert(node->right, key); 
     else // Equal keys are not allowed in BST 
         return node; 
 
     /* 2. Update height of this ancestor node */
-    node->height = 1 + max(height(node->left), 
-            height(node->right)); 
+    node->height = 1 + maxInt(avl_height(node->left), 
+            avl_height(node->right)); 
 
     /* 3. Get the balance factor of this ancestor 
        node to check whether this node became 
        unbalanced */
-    int balance = getBalance(node); 
+    int balance = avl_getBalance(node); 
 
     // If this node becomes unbalanced, then 
     // there are 4 cases 
 
     // Left Left Case 
     if (balance > 1 && key < node->left->key) 
-        return rightRotate(node); 
+        return avl_rightRotate(node); 
 
     // Right Right Case 
     if (balance < -1 && key > node->right->key) 
-        return leftRotate(node); 
+        return avl_leftRotate(node); 
 
     // Left Right Case 
     if (balance > 1 && key > node->left->key) { 
-        node->left = leftRotate(node->left); 
-        return rightRotate(node); 
+        node->left = avl_leftRotate(node->left); 
+        return avl_rightRotate(node); 
     } 
 
     // Right Left Case 
     if (balance < -1 && key < node->right->key) { 
-        node->right = rightRotate(node->right); 
-        return leftRotate(node); 
+        node->right = avl_rightRotate(node->right); 
+        return avl_leftRotate(node); 
     } 
 
     /* return the (unchanged) node pointer */
@@ -124,12 +124,12 @@ avlTreeNode *avl_insert(avlTreeNode* node, int key) {
 
 // A utility function to print preorder traversal 
 // of the tree. 
-// The function also prints height of every node 
+// The function also prints avl_height of every node 
 void avl_preOrder(avlTreeNode *root) { 
     if(root != NULL) { 
         printf("%d ", root->key); 
-        preOrder(root->left); 
-        preOrder(root->right); 
+        avl_preOrder(root->left); 
+        avl_preOrder(root->right); 
     } 
 } 
 
@@ -137,15 +137,15 @@ void avl_testa() {
     avlTreeNode *root = NULL;
 
     /* Constructing tree given in the above figure */
-    root = insert(root, 10);
-    root = insert(root, 20);
-    root = insert(root, 30);
-    root = insert(root, 40);
-    root = insert(root, 50);
-    root = insert(root, 25);
+    root = avl_insert(root, 10);
+    root = avl_insert(root, 20);
+    root = avl_insert(root, 30);
+    root = avl_insert(root, 40);
+    root = avl_insert(root, 50);
+    root = avl_insert(root, 25);
 
 
-    preOrder(root);
+    avl_preOrder(root);
 
 } 
 
