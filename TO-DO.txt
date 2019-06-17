@@ -1,3 +1,29 @@
 // Lista vs arvores
 // Processamento vs memoria
 // Contador de Tempo
+
+avl servira para
+    ordenar ints
+    ordenar char
+
+//TO-DO: Procura nome do usuario na arvore. Se nao encontrar cria novo e adiciona, caso contrario atualiza ele
+//TO-DO: Adicionar o novo usuario a arvore
+
+
+ordem alfabetica 
+    arvore de usuarios
+    arvore de hashtags
+
+ordem decrescente
+    hash por qtd de mencoes
+    usuarios com mais tweets
+    tweets por retweets
+    usuarios mais mencionados
+    usuarios com mais retweets
+
+
+arvore avl-> chave = primeiro char da string
+    caso igual, verifica o segundo
+    usada pra listar os usuarios, hashtags
+
+
