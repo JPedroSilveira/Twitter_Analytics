@@ -1,8 +1,6 @@
 #include "../Header/File.h"
 
 int argumentsError(int argc) {
-	// Recebe a quantidade de parametros na chamada do programa
-	// Caso seja maior que 3 (a.out, arquivo1, arquivo2) nao executa o programa
 	if (argc > 3) {
 		printf("Mais de dois parametros\n");
 		return 1;
@@ -34,7 +32,7 @@ List* readArgumentsForOp(FILE *file) {
 	int count, number;
 
 	while ((command = getc(file)) != EOF) {
-		ArgumentsForOp* arguments = malloc(sizeof(ArgumentsForOp));
+		ArgumentsForOp* arguments = (ArgumentsForOp*)malloc(sizeof(ArgumentsForOp));
 		*arguments = ArgumentsForOp_New();
 
 		arguments->opChar = command; // char comando
@@ -238,29 +236,5 @@ void exFile2(FILE *input2) {
 	}
 	*/
 }
-
-/* Por alguma razão mesmo com "atoi" ou getw a variável está sendo imprimida corretamente apenas com
-* o %c ao invés de %d
-*/
-
-
-
-/*
-*
-void
-for(int i=0; i < strlen(myString); i++)
-{
-switch(myString[i])
-{
-case 'à':
-case 'à':
-case 'â':
-case 'ä':
-myString[i] = 'a';
-break;
-....
-}
-}
-*/
 
 

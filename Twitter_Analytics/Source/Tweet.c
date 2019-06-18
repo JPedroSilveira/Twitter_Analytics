@@ -15,7 +15,7 @@ UserInfo UserInfo_New()
 
 User* UserP_New()
 {
-	User* user = malloc(sizeof(User));
+	User* user = (User*)malloc(sizeof(User));
 	
 	user->info = UserInfo_New();
 	user->tweetList = List_New();
@@ -36,7 +36,7 @@ User User_New()
 
 Hashtag* HashtagP_New()
 {
-	Hashtag* hashtag = malloc(sizeof(Hashtag)); 
+	Hashtag* hashtag = (Hashtag*)malloc(sizeof(Hashtag));
 	hashtag->tweetList = List_New();
 	hashtag->tweetCount = 0;
 
@@ -45,7 +45,7 @@ Hashtag* HashtagP_New()
 
 Tweet* TweetP_New()
 {
-	Tweet* tweet = malloc(sizeof(Tweet));
+	Tweet* tweet = (Tweet*)malloc(sizeof(Tweet));
 	tweet->hashtagList = List_New();
 	tweet->mentionList = List_New();
 	tweet->likeCount = 0;

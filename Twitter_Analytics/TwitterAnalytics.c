@@ -4,6 +4,7 @@
 #include "Header/File.h"
 #include "Header/Generic.h"
 #include "Header/AVL.h"
+#include "Header/StringUtils.h"
 
 int main(int argc, char *argv[]) {
     /*Teste Lista
@@ -22,6 +23,7 @@ int main(int argc, char *argv[]) {
 	printf("\nItem 2: %d", *dois);
     */
 
+	/* Teste operações
 	if (argumentsError(argc)) return 0;
 
 	FILE *file1, *file2, *OUTPUT;
@@ -34,13 +36,29 @@ int main(int argc, char *argv[]) {
 	if (filesError(file1, file2)) return 0;
 	
 	List* argumentsForOpList = readArgumentsForOp(file2);
-	ArgumentsForOp* teste = argumentsForOpList->Get(argumentsForOpList, 0);
-	printf("%c\n", teste->opChar);
-	printf("%d\n", teste->number);
-	printf("%s\n", teste->name);
+	for (int x = 0; x < 7; x++) {
+		ArgumentsForOp* teste = argumentsForOpList->Get(argumentsForOpList, x);
+		printf("%c\n", teste->opChar);
+		printf("%d\n", teste->number);
+		printf("%s\n", teste->name);
+	}
+	*/
 
+	/*Teste AVL*/
+	/*
+	printf("\n\nTeste AVL INT \n");
+	AVL_testInt();
+	printf("\n\nTeste AVL CHAR \n");
+	AVL_testChar();
+	printf("\n\nTeste AVL STRING \n");
+	AVL_testString();
+	*/
 
-    testaFuncoesGenericas();
-    avl_testa();
+	/*StringUtils Teste*/
+	/*
+	StringUtils_removeAccentsTest();
+	StringUtils_toLowerCaseTest();
+	*/
+
     return 0;
 }

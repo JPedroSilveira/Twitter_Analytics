@@ -13,15 +13,21 @@ typedef struct s_ArgumentsForOp {
 	char name[OP_NAME_MAX_CHAR_LENGTH];
 } ArgumentsForOp;
 
-ArgumentsForOp ArgumentsForOp_New();
-
-List* readArgumentsForOp(FILE *file);
-
-void readTweets(FILE *file);
-
+// Recebe a quantidade de parametros na chamada do programa
+// Caso seja maior que 3 (a.out, arquivo1, arquivo2) nao executa o programa
 int argumentsError(int argc);
 
+//Retorna 1 caso tenha ocorrido erro ao abrir os arquivos e 0 caso contrário
 int filesError(FILE *input1, FILE *input2);
 
-// case sensitive
-// acentos
+//Inicializa um novo ArgumentsForOp
+ArgumentsForOp ArgumentsForOp_New();
+
+//Lê o arquivos com os dados das operações e salva em uma lista de ArgumentsForOp
+List* readArgumentsForOp(FILE *file);
+
+//Lê um valor inteiro em uma arquivos
+int readInt(FILE *file);
+
+//Lê o arquivos dos Tweets
+void readTweets(FILE *file);
