@@ -1,152 +1,246 @@
- #include <stdio.h>
-#include <stdlib.h> 
 #include "../Header/AVL.h"
 
-// Functions
-// C program to insert a node in AVL tree 
-
-// A utility function to get the height of the tree 
-int avl_height(avlTreeNode *N) { 
-    if (N == NULL) 
-        return 0; 
-    return N->height; 
+int AVL_height(avlTreeNode *node) {
+	if (node == NULL) {
+		return 0;
+	}
+    return node->height;
 } 
 
-// A utility function to get maximumInt of two integers 
-int maxInt(int a, int b) { 
-    return (a > b)? a : b; 
-} 
+avlTree* AVL_newTreeInt() {
+	avlTree* tree = (avlTree*)malloc(sizeof(avlTree));
+	tree->root = NULL;
+	tree->compare = CompareUtils_Int;
 
-/* Helper function that allocates a new node with the given key and 
-   NULL left and right pointers. */
-avlTreeNode *avl_newNode(int key) { 
-    avlTreeNode* node = (struct s_avlNode*) 
-    malloc(sizeof(struct s_avlNode)); 
-    node->key = key; 
-    node->left = NULL; 
-    node->right = NULL; 
-    node->height = 1; // new node is initially added at leaf 
-    return(node); 
-} 
+	return tree;
+}
 
-// A utility function to right rotate subtree rooted with y 
-// See the diagram given above. 
-avlTreeNode *avl_rightRotate(avlTreeNode *y) { 
+avlTree* AVL_newTreeChar() {
+	avlTree* tree = (avlTree*)malloc(sizeof(avlTree));
+	tree->root = NULL;
+	tree->compare = CompareUtils_Char;
+
+	return tree;
+}
+
+avlTree* AVL_newTreeString() {
+	avlTree* tree = (avlTree*)malloc(sizeof(avlTree));
+	tree->root = NULL;
+	tree->compare = CompareUtils_String;
+
+	return tree;
+}
+
+avlTreeNode* AVL_newNode(void* key) {
+	avlTreeNode* node = (avlTreeNode*)malloc(sizeof(avlTreeNode));
+
+	node->key = key;
+	node->left = NULL;
+	node->right = NULL;
+	node->height = 1; //Nodo folha
+	return node;
+}
+
+avlTreeNode* AVL_rightRotate(avlTreeNode *y) {
     avlTreeNode *x = y->left; 
     avlTreeNode *T2 = x->right; 
 
-    // Perform rotation 
+    // Rotaciona 
     x->right = y; 
     y->left = T2; 
 
-    // Update avl_heights 
-    y->height = maxInt(avl_height(y->left), avl_height(y->right))+1; 
-    x->height = maxInt(avl_height(x->left), avl_height(x->right))+1; 
+    // Atualiza a altura da árvore
+    y->height = CompareUtils_maxInt(AVL_height(y->left), AVL_height(y->right))+1;
+    x->height = CompareUtils_maxInt(AVL_height(x->left), AVL_height(x->right))+1;
 
-    // Return new root 
+    // Retorna a nova raiz
     return x; 
 } 
 
-// A utility function to left rotate subtree rooted with x 
-// See the diagram given above. 
-avlTreeNode *avl_leftRotate(avlTreeNode *x) { 
+avlTreeNode* AVL_leftRotate(avlTreeNode *x) {
     avlTreeNode *y = x->right; 
     avlTreeNode *T2 = y->left; 
 
-    // Perform rotation 
+    // Rotaciona 
     y->left = x; 
     x->right = T2; 
 
-    // Update heights 
-    x->height = maxInt(avl_height(x->left), avl_height(x->right))+1; 
-    y->height = maxInt(avl_height(y->left), avl_height(y->right))+1; 
+    // Atualiza a altura da árvore
+    x->height = CompareUtils_maxInt(AVL_height(x->left), AVL_height(x->right))+1;
+    y->height = CompareUtils_maxInt(AVL_height(y->left), AVL_height(y->right))+1;
 
-    // Return new root 
+    // Retorna a nova raiz
     return y; 
 } 
 
-// Get Balance factor of node N 
-int avl_getBalance(avlTreeNode *N) { 
-    if (N == NULL) 
-        return 0; 
-    return avl_height(N->left) - avl_height(N->right); 
+int AVL_getBalance(avlTreeNode *node) {
+	if (node == NULL) {
+		return 0;
+	}
+    return AVL_height(node->left) - AVL_height(node->right);
 } 
 
-// Recursive function to insert a key in the subtree rooted 
-// with node and returns the new root of the subtree. 
-avlTreeNode *avl_insert(avlTreeNode* node, int key) { 
-    /* 1. Perform the normal BST insertion */
-    if (node == NULL) 
-        return(avl_newNode(key)); 
+avlTreeNode* AVL_insertInt(avlTree* tree, int key) {
+	int* memoryKey = (int*)malloc(sizeof(int));
+	*memoryKey = key;
 
-    if (key < node->key) 
-        node->left = avl_insert(node->left, key); 
-    else if (key > node->key) 
-        node->right = avl_insert(node->right, key); 
-    else // Equal keys are not allowed in BST 
-        return node; 
+	return AVL_insert(tree, memoryKey);
+}
 
-    /* 2. Update height of this ancestor node */
-    node->height = 1 + maxInt(avl_height(node->left), 
-            avl_height(node->right)); 
+avlTreeNode* AVL_insertChar(avlTree* tree, char key) {
+	char* memoryKey = (char*)malloc(sizeof(char));
+	*memoryKey = key;
 
-    /* 3. Get the balance factor of this ancestor 
-       node to check whether this node became 
-       unbalanced */
-    int balance = avl_getBalance(node); 
+	return AVL_insert(tree, memoryKey);
+}
 
-    // If this node becomes unbalanced, then 
-    // there are 4 cases 
+avlTreeNode* AVL_insertString(avlTree* tree, char* key) {
+	char* memoryKey = malloc(sizeof(char*));
+	strcpy(memoryKey, key);
 
-    // Left Left Case 
-    if (balance > 1 && key < node->left->key) 
-        return avl_rightRotate(node); 
+	return AVL_insert(tree, memoryKey);
+}
 
-    // Right Right Case 
-    if (balance < -1 && key > node->right->key) 
-        return avl_leftRotate(node); 
+avlTreeNode* AVL_insert(avlTree* tree, void* key) {
+    // 1. Verifica se a árvore existe e tem comparador
+	if (tree == NULL || tree->compare == NULL) {
+		return NULL;
+	}
 
-    // Left Right Case 
-    if (balance > 1 && key > node->left->key) { 
-        node->left = avl_leftRotate(node->left); 
-        return avl_rightRotate(node); 
+	// 1.1 Busca o local da inserção
+
+	if (tree->root == NULL) { //Caso base, sub-árvore vazia
+		tree->root = AVL_newNode(key);
+
+		return tree->root;
+	}
+
+	avlTreeNode* node = tree->root;
+	avlTreeNode* newNode = NULL;
+
+	int compareResult = tree->compare(key, node->key);
+
+	if (compareResult == -1) {
+		tree->root = node->left;
+		newNode = AVL_insert(tree, key); //Compara a sub-árvore
+		tree->root = node; //Retorna a raiz inicial
+		tree->root->left = newNode; //Adiciona a nova sub-árvore
+	}
+	else if (compareResult == 1) {
+		tree->root = node->right;
+		newNode = AVL_insert(tree, key);
+		tree->root = node; //Retorna a raiz inicial
+		tree->root->right = newNode; //Adiciona a nova sub-árvore
+	}
+	else { // Se for igual a um existente retorna NULL
+		return NULL;
+	}
+
+    // 2. Atualiza a altura do seu nodo antecessor
+    node->height = 1 + CompareUtils_maxInt(AVL_height(node->left), AVL_height(node->right)); 
+
+    // 3. Pega o fator de balanceamente do nodo antecessor e verifica se a árvore está desbalanceada
+    int balance = AVL_getBalance(node); 
+
+    // Em caso de nodo desbalanceado verificar qual o caso e re-balanceia
+
+    
+	if (balance > 1 && tree->compare(key, node->left->key) == -1) { // Esquerda Esquerda
+		tree->root = AVL_rightRotate(node);
+	} else if (balance < -1 && tree->compare(key, node->right->key) == 1) { // Direita Direita
+		tree->root = AVL_leftRotate(node);
+	} else if (balance > 1 && tree->compare(key, node->left->key) == 1) { // Esquerda Direita 
+		node->left = AVL_leftRotate(node->left);
+		tree->root = AVL_rightRotate(node);
+	} else if (balance < -1 && tree->compare(key, node->right->key) == -1) { // Direita Esquerda
+		node->right = AVL_rightRotate(node->right);
+		tree->root = AVL_leftRotate(node);
+	}
+
+    //Retorna o nodo raiz
+	return tree->root;
+} 
+
+void AVL_preOrderInt(avlTree* tree) {
+	if (tree != NULL && tree->root != NULL) {
+		avlTreeNode* root = tree->root;
+        printf("%d ", *((int*)(root->key)));
+
+		tree->root = root->left;
+		AVL_preOrderInt(tree);
+
+		tree->root = root->right;
+		AVL_preOrderInt(tree);
     } 
-
-    // Right Left Case 
-    if (balance < -1 && key < node->right->key) { 
-        node->right = avl_rightRotate(node->right); 
-        return avl_leftRotate(node); 
-    } 
-
-    /* return the (unchanged) node pointer */
-    return node; 
 } 
 
-// A utility function to print preorder traversal 
-// of the tree. 
-// The function also prints avl_height of every node 
-void avl_preOrder(avlTreeNode *root) { 
-    if(root != NULL) { 
-        printf("%d ", root->key); 
-        avl_preOrder(root->left); 
-        avl_preOrder(root->right); 
-    } 
+void AVL_preOrderChar(avlTree* tree) {
+	if (tree != NULL && tree->root != NULL) {
+		avlTreeNode* root = tree->root;
+		printf("%c ", *((char*)(root->key)));
+
+		tree->root = root->left;
+		AVL_preOrderChar(tree);
+
+		tree->root = root->right;
+		AVL_preOrderChar(tree);
+	}
+}
+
+void AVL_preOrderString(avlTree* tree) {
+	if (tree != NULL && tree->root != NULL) {
+		avlTreeNode* root = tree->root;
+		printf("%s ", ((char*)(root->key)));
+
+		tree->root = root->left;
+		AVL_preOrderString(tree);
+
+		tree->root = root->right;
+		AVL_preOrderString(tree);
+	}
+}
+
+void AVL_testInt() {
+	avlTree* tree = AVL_newTreeInt();
+
+    AVL_insertInt(tree, 10);
+    AVL_insertInt(tree, 20);
+    AVL_insertInt(tree, 30);
+    AVL_insertInt(tree, 40);
+    AVL_insertInt(tree, 50);
+    AVL_insertInt(tree, 25);
+
+
+    AVL_preOrderInt(tree);
 } 
 
-void avl_testa() { 
-    avlTreeNode *root = NULL;
+void AVL_testChar() {
+	avlTree* tree = AVL_newTreeChar();
 
-    /* Constructing tree given in the above figure */
-    root = avl_insert(root, 10);
-    root = avl_insert(root, 20);
-    root = avl_insert(root, 30);
-    root = avl_insert(root, 40);
-    root = avl_insert(root, 50);
-    root = avl_insert(root, 25);
+	AVL_insertChar(tree, 'a');
+	AVL_insertChar(tree, 'b');
+	AVL_insertChar(tree, 'd');
+	AVL_insertChar(tree, 'e');
+	AVL_insertChar(tree, 'f');
+	AVL_insertChar(tree, 'c');
 
 
-    avl_preOrder(root);
+	AVL_preOrderChar(tree);
 
-} 
+}
+
+void AVL_testString() {
+	avlTree* tree = AVL_newTreeString();
+
+	AVL_insertString(tree, "abacaxi");
+	AVL_insertString(tree, "arvore");
+	AVL_insertString(tree, "casa");
+	AVL_insertString(tree, "dado");
+	AVL_insertString(tree, "egua");
+	AVL_insertString(tree, "bola");
+
+
+	AVL_preOrderString(tree);
+}
 
 
