@@ -18,7 +18,9 @@ void push(genericNode** head_ref, void *new_data, size_t data_size) {
 	// Copy contents of new_data to newly allocated memory. 
 	// Assumption: char takes 1 byte. 
 	int i; 
-	for (i=0; i < data_size; i++) *((char *)new_node->data + i) = *((char *)new_data + i);
+	for (i = 0; i < data_size; i++) {
+		*((char *)new_node->data + i) = *((char *)new_data + i);
+	}
 
 	// Change head pointer as new node is added at the beginning 
 	(*head_ref) = new_node; 
@@ -69,7 +71,7 @@ int testaFuncoesGenericas() {
 	// Create and print a float linked list 
 	unsigned float_size = sizeof(float); 
 	start = NULL; 
-	float arr2[] = {10.1, 20.2, 30.3, 40.4, 50.5}; 
+	float arr2[] = {10.1f, 20.2f, 30.3f, 40.4f, 50.5f}; 
 	for (i=4; i>=0; i--) 
 	push(&start, &arr2[i], float_size); 
 	printf("\n\nCreated float linked list is \n"); 

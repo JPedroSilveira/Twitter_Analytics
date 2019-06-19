@@ -1,11 +1,11 @@
 #include <string.h>
 #include "./List.h"
 
-#define USER_NAME_LENGTH 20
-#define TWEET_TEXT_LENGTH 140
-#define HASHTAG_NAME_LENGTH 20
+#define USER_NAME_LENGTH 50
+#define TWEET_TEXT_LENGTH 200
+#define HASHTAG_NAME_LENGTH 50
 
-typedef struct s_userInfo {
+typedef struct s_UserInfo {
 	int tweetCount;
 	int mentionCount;
 	int retweetCount;
@@ -43,3 +43,5 @@ typedef struct s_Tweet {
 
 Tweet* TweetP_New();
 
+//Funcoes compartilhadas
+void User_AddTweet(User* user, Tweet* tweet);

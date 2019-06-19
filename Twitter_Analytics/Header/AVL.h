@@ -3,70 +3,88 @@
 #include "../Header/CompareUtils.h"
 
 //Nodo da árvore
-typedef struct s_avlNode { 
+typedef struct s_AvlNode { 
 	void* key; 
-	struct s_avlNode *left; 
-	struct s_avlNode *right; 
+	struct s_AvlNode *left;
+	struct s_AvlNode *right;
 	int height; 
-} avlTreeNode; 
+} AvlTreeNode; 
 
 //Struct da árvore
-typedef struct s_avlTree {
-	avlTreeNode* root;
+typedef struct s_AvlTree {
+	AvlTreeNode* root;
 	int (*compare) (void*, void*);
-} avlTree;
+} AvlTree;
 
 //Pega a altura da árvore
-int AVL_height(avlTreeNode* node);
+int AVL_height(AvlTreeNode* node);
 
 //Cria uma nova árvore com chave INT
-avlTree* AVL_newTreeInt();
+AvlTree* AVL_newTreeInt();
 
 //Cria uuma nova árvore com chave CHAR
-avlTree* AVL_newTreeChar();
+AvlTree* AVL_newTreeChar();
 
 //Cria uma nova árvore com chave STRING
-avlTree* AVL_newTreeString();
+AvlTree* AVL_newTreeString();
+
+//Cria uma nova árvore com chave User.name
+AvlTree* AVL_newTreeUserByName();
+
+//Cria uma nova árvore com chave Hashtag.name
+AvlTree* AVL_newTreeHashtagByName();
 
 //Inicializa os dados básicas do novo sem ser a chave
-avlTreeNode* AVL_newNode(void* key);
+AvlTreeNode* AVL_newNode(void* data);
 
 // Rotaciona sub-árvore para direita
-avlTreeNode* AVL_rightRotate(avlTreeNode* y);
+AvlTreeNode* AVL_rightRotate(AvlTreeNode* y);
 
 // Rotaciona sub-árvore para esquerda
-avlTreeNode* AVL_leftRotate(avlTreeNode* x);
+AvlTreeNode* AVL_leftRotate(AvlTreeNode* x);
 
 // Retorna o valor de balanceamente de um nodo
-int AVL_getBalance(avlTreeNode* node);
+int AVL_getBalance(AvlTreeNode* node);
 
 //Insere um novo nodo inteiro na árvore
-avlTreeNode* AVL_insertInt(avlTree* tree, int key);
+AvlTreeNode* AVL_insertInt(AvlTree* tree, int key);
 
 //Insere um novo nodo char na árvore
-avlTreeNode* AVL_insertChar(avlTree* tree, char key);
+AvlTreeNode* AVL_insertChar(AvlTree* tree, char key);
 
 //Insere um novo nodo string na árvore
-avlTreeNode* AVL_insertString(avlTree* tree, char* key);
+AvlTreeNode* AVL_insertString(AvlTree* tree, char* key);
 
-/* Adiciona um novo nodo a árvore
-Retorna o nodo raiz*/
-avlTreeNode* AVL_insert(avlTree* tree, void* key);
+/*Adiciona um novo nodo a árvore
+  Retorna o nodo raiz*/
+AvlTreeNode* AVL_insert(AvlTree* tree, void* key);
 
-// Imprime a árvore pré-ordenada e a altura de cada nodo INT
-void AVL_preOrderInt(avlTree* tree);
+/*Busca um nodo na arvore por um endereco de valor, caso nao ache retorna NULL*/
+AvlTreeNode* AVL_get(AvlTree* tree, void* key);
 
-// Imprime a árvore pré-ordenada e a altura de cada nodo CHAR
-void AVL_preOrderChar(avlTree* tree);
+/*Busca um nodo na arvore por um valor INT, caso nao ache retorna NULL*/
+AvlTreeNode* AVL_getInt(AvlTree* tree, int key);
 
-// Imprime a árvore pré-ordenada e a altura de cada nodo STRING
-void AVL_preOrderString(avlTree* tree);
+/*Busca um nodo na arvore por um valor CHAR, caso nao ache retorna NULL*/
+AvlTreeNode* AVL_getChar(AvlTree* tree, char key);
 
-// Teste básico para AVL com chaves tipo INT
+/*Busca um nodo na arvore por um valor STRING, caso nao ache retorna NULL*/
+AvlTreeNode* AVL_getString(AvlTree* tree, char* key);
+
+//Imprime a árvore pré-ordenada e a altura de cada nodo INT
+void AVL_preOrderInt(AvlTree* tree);
+
+//Imprime a árvore pré-ordenada e a altura de cada nodo CHAR
+void AVL_preOrderChar(AvlTree* tree);
+
+//Imprime a árvore pré-ordenada e a altura de cada nodo STRING
+void AVL_preOrderString(AvlTree* tree);
+
+//Teste básico para AVL com chaves tipo INT
 void AVL_testInt();
 
-// Teste básico para AVL com chaves tipo CHAR
+//Teste básico para AVL com chaves tipo CHAR
 void AVL_testChar();
 
-// Teste básico para AVL com chaves tipo STRING
+//Teste básico para AVL com chaves tipo STRING
 void AVL_testString();

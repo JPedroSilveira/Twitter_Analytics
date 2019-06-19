@@ -9,13 +9,11 @@ int CompareUtils_Int(void* a, void* b) {
 	int B = *((int*)b);
 
 	if (A > B) {
-		return 1;
-	}
-	else if (A == B) {
-		return 0;
-	}
-	else {
-		return -1;
+		return COMPARE_BIGGER;
+	} else if (A == B) {
+		return COMPARE_EQUAL;
+	} else {
+		return COMPARE_SMALLER;
 	}
 }
 
@@ -24,13 +22,11 @@ int CompareUtils_Char(void* a, void* b) {
 	char B = *((char*)b);
 
 	if (A > B) {
-		return 1;
-	}
-	else if (A == B) {
-		return 0;
-	}
-	else {
-		return -1;
+		return COMPARE_BIGGER;
+	} else if (A == B) {
+		return COMPARE_EQUAL;
+	} else {
+		return COMPARE_SMALLER;
 	}
 }
 
@@ -39,12 +35,18 @@ int CompareUtils_String(void* a, void* b) {
 	char* B = (char*)b;
 	int cmp = strcmp(A, B);
 	if (cmp > 0) { //caso a > b
-		return 1;
+		return COMPARE_BIGGER;
+	} else if (cmp < 0) { //caso a < b
+		return COMPARE_SMALLER;
+	} else { //caso a == b
+		return COMPARE_EQUAL;
 	}
-	else if (cmp < 0) { //caso a < b
-		return -1;
-	}
-	else { //caso a == b
-		return cmp;
-	}
+}
+
+int CompareUtils_UserByName(User* a, User* b) {
+	return CompareUtils_String(a->name, b->name);
+}
+
+int CompareUtils_HashtagByName(Hashtag* a, Hashtag* b) {
+	return CompareUtils_String(a->name, b->name);
 }

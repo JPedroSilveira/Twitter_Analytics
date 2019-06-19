@@ -2,12 +2,11 @@
 #include <stdlib.h>
 
 #include "Header/File.h"
-#include "Header/Generic.h"
-#include "Header/AVL.h"
 #include "Header/StringUtils.h"
 
 int main(int argc, char *argv[]) {
-    /*Teste Lista
+    /* Teste Lista */
+	/*
 	List* list = List_New();
 
 	int l = 1;
@@ -21,9 +20,10 @@ int main(int argc, char *argv[]) {
 	int *dois = list->Get(list, 1);
 	printf("\nItem 1: %d", *um);
 	printf("\nItem 2: %d", *dois);
-    */
+    
 
-	/* Teste operações
+	/* Teste operações */
+	/*
 	if (argumentsError(argc)) return 0;
 
 	FILE *file1, *file2, *OUTPUT;
@@ -42,23 +42,23 @@ int main(int argc, char *argv[]) {
 		printf("%d\n", teste->number);
 		printf("%s\n", teste->name);
 	}
-	*/
+	
 
 	/*Teste AVL*/
-	/*
+	
 	printf("\n\nTeste AVL INT \n");
 	AVL_testInt();
 	printf("\n\nTeste AVL CHAR \n");
 	AVL_testChar();
 	printf("\n\nTeste AVL STRING \n");
 	AVL_testString();
-	*/
+	
 
 	/*StringUtils Teste*/
 	/*
 	StringUtils_removeAccentsTest();
 	StringUtils_toLowerCaseTest();
-	*/
-
+	
+	/*Fim testes*/
     return 0;
 }

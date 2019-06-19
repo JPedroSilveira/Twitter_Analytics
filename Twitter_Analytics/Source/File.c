@@ -91,6 +91,11 @@ void readTweets(FILE * file)
 	char readChar;
 	int countChar, countHashtagChar = -1, countMentionChar = -1, number = 0;
 	while ((readChar = getc(file)) != EOF) {
+		/* Arvores */ //Talvez receber as mesmas como parametro
+		AvlTree* avlUsuarioName = AVL_newTreeUserByName();
+		AvlTree* avlHashtagName = AVL_newTreeHashtagByName();
+		/* Fim arvores */
+
 		Tweet* tweet = TweetP_New();
 		User* user;
 		Hashtag* hashtag;
@@ -110,24 +115,23 @@ void readTweets(FILE * file)
 
 		userName[countChar + 1] = '\0';
 
-		//TO-DO: Procura nome do usuario na arvore. Se nao encontrar cria novo e adiciona, caso contrario atualiza ele
 		user = UserP_New();
-		user->info.tweetCount = 1;
 		strcpy(user->name, userName);
-		user->tweetList->Add(user->tweetList, tweet);
-		//TO-DO: Adicionar o novo usuario a arvore
-
+		user = AVL_insert(avlUsuarioName, user); //Adiciona o novo usuário na árvore caso ainda não exista ou retorna o existente
+		
 		//Lendo texto do tweet
 		countChar = 0;
 		int continue_ = 1;
 		do {
 			readChar = getc(file);
-			if (readChar == '#' || countHashtagChar != -1) { //Le Hashtag
+			if (readChar == '#' || countHashtagChar != -1) { //Lê Hashtag
 				if (readChar == '#') { //Inicia leitura do nome da hashtag
 					countHashtagChar++;
-				}
-				else if (readChar == ' ' || readChar != ';') { //Finaliza hashtag
+				} else if (readChar == ' ' || readChar != ';') { //Finaliza hashtag
 					hashtagName[countHashtagChar] = '\0';
+
+					hashtag = AVL_get(avlHashtagName, hashtagName)->key;
+
 					//TO-DO: Procura hashtag na arvore. Se nao existir cria nova e adiciona na arvore, se existir apenas adiciona este Tweet a ela
 					hashtag = HashtagP_New();
 					strcpy(hashtag->name, hashtagName);
@@ -137,17 +141,14 @@ void readTweets(FILE * file)
 					//Adiciona a Hashtag a lista de hashtags do Tweet
 					tweet->hashtagList->Add(tweet->hashtagList, hashtag);
 					countHashtagChar = -1;
-				}
-				else { //Segue lendo o nome da hashtag
+				} else { //Segue lendo o nome da hashtag
 					hashtagName[countHashtagChar] = readChar;
 					countHashtagChar++;
 				}
-			}
-			else if (readChar == '@' || countMentionChar != -1) { //Le mencao
+			} else if (readChar == '@' || countMentionChar != -1) { //Le mencao
 				if (readChar == '@') { //Inicializa leitura do nome do usuario mencionado
 					countMentionChar++;
-				}
-				else if (readChar != ' ' || readChar !=  ';') { //Finaliza leitura
+				} else if (readChar != ' ' || readChar !=  ';') { //Finaliza leitura
 					mentionUserName[countMentionChar] = '\0';
 					//TO-DO: Procura usuario na arvore. Se nao existir cria novo e adiciona na arvore, se existir adiciona este tweet a lista de mencoes
 					userMention = UserP_New();
@@ -158,8 +159,7 @@ void readTweets(FILE * file)
 					//Adiciona o usuario ao que o Tweet menciona
 					tweet->mentionList->Add(tweet->mentionList, userMention);
 					countMentionChar = -1;
-				}
-				else { //Segue lendo o nome do usuario mencionado
+				} else { //Segue lendo o nome do usuario mencionado
 					mentionUserName[countMentionChar] = readChar;
 					countMentionChar++;
 				}
@@ -188,6 +188,9 @@ void readTweets(FILE * file)
 		}
 
 		tweet->likeCount = number;
+
+		//Adiciona o Tweet a lista de tweets do usuario
+		User_AddTweet(user, tweet);
 
 		//TO-DO: Adicionar Tweet na sua arvore
 	}
