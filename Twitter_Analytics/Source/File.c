@@ -1,6 +1,7 @@
 #include "../Header/File.h"
+#include "../Header/CharUtils.h"
 
-int argumentsError(int argc) {
+int File_argumentsError(int argc) {
 	if (argc > 3) {
 		printf("Mais de dois parametros\n");
 		return 1;
@@ -8,7 +9,7 @@ int argumentsError(int argc) {
 	else return 0;
 }
 
-int filesError(FILE *input1, FILE *input2) {
+int File_filesError(FILE *input1, FILE *input2) {
 	if (!input1 || !input2) { // Caso ocorra erro na abertura de um dos arquivos
 		printf("Parametros invalidos\n");
 		return 1;
@@ -16,16 +17,14 @@ int filesError(FILE *input1, FILE *input2) {
 	else return 0;
 }
 
-ArgumentsForOp ArgumentsForOp_New() {
-	ArgumentsForOp argumentsForOp;
-	argumentsForOp.opChar = ' ';
-	argumentsForOp.number = 0;
-	argumentsForOp.name[0] = '\0'; //Inicializa a string vazia
+OPES File_readFiles(FILE* fileTweets, FILE* fileOps) {
+	OPES opes = File_readTweets(fileTweets);
+	opes.opsArguments = File_readArgumentsForOp(fileOps);
 
-	return argumentsForOp;
+	return opes;
 }
 
-List* readArgumentsForOp(FILE *file) {
+List* File_readArgumentsForOp(FILE *file) {
 	List* argumentsList = List_New();
 
 	char command, letter;
@@ -58,25 +57,25 @@ List* readArgumentsForOp(FILE *file) {
 		}
 		else {
 			strcpy(arguments->name, "");
-			arguments->number = readInt(file);
+			arguments->number = File_readInt(file);
 		}
 
-		argumentsList->Add(argumentsList, arguments);
+		List_Add(argumentsList, arguments);
 	}
 
 	return argumentsList;
 }
 
-int readInt(FILE *file) {
+int File_readInt(FILE *file) {
 	int count = 0;
-	return readIntAux(file, &count);
+	return File_readIntAux(file, &count);
 }
 
-int readIntAux(FILE *file, int *count) {
+int File_readIntAux(FILE *file, int *count) {
 	char character = getc(file);
 	int number;
-	if (character != '\n' && character != ' ') { //Lê até achar o final
-		number = readIntAux(file, count); //Chama recursivamente até o último caracter
+	if (character != '\n' && character != ' ' && character != ';' && character != EOF) { //Lê até achar o final
+		number = File_readIntAux(file, count); //Chama recursivamente até o último caracter
 		number += ((character - 48) * pow(10, *count)); //Converte char ASCII para int e eleva para sua casa decimal somando ao valor total
 		*count = *count + 1; //Soma o contador para cada nova casa decimal
 		return number; //Retorna o número parcial
@@ -86,118 +85,109 @@ int readIntAux(FILE *file, int *count) {
 	}
 }
 
-void readTweets(FILE * file)
-{
+OPES File_readTweets(FILE * file) {
 	char readChar;
 	int countChar, countHashtagChar = -1, countMentionChar = -1, number = 0;
-	while ((readChar = getc(file)) != EOF) {
-		/* Arvores */ //Talvez receber as mesmas como parametro
-		AvlTree* avlUsuarioName = AVL_newTreeUserByName();
-		AvlTree* avlHashtagName = AVL_newTreeHashtagByName();
-		/* Fim arvores */
+	OPES opes = OPES_New();
 
+	while ((readChar = getc(file)) != EOF) {
 		Tweet* tweet = TweetP_New();
 		User* user;
 		Hashtag* hashtag;
 		User* userMention;
-		char userName[USER_NAME_LENGTH];
-		char hashtagName[HASHTAG_NAME_LENGTH];
-		char mentionUserName[USER_NAME_LENGTH];
 
 		//Lendo nome do usuario
 		countChar = 0;
-		userName[countChar] = readChar;
+		readChar = getc(file); //Pula a @ inicial do nome
+		user = UserP_New(); //Inicia um novo usuário
 
-		while ((readChar = getc(file)) != ';') {
+		user->name[countChar] = CharUtils_toLowerCase(readChar);
+
+		while ((readChar = getc(file)) != ';') { //Lê todo o nome do usuário
 			countChar++;
-			userName[countChar] = readChar;
+			user->name[countChar] = CharUtils_toLowerCase(readChar);
 		}
 
-		userName[countChar + 1] = '\0';
+		user->name[countChar + 1] = '\0'; //Finaliza a leitura do nome do usuario
 
-		user = UserP_New();
-		strcpy(user->name, userName);
-		user = AVL_insert(avlUsuarioName, user); //Adiciona o novo usuário na árvore caso ainda não exista ou retorna o existente
+		//Adiciona o novo usuário na árvore caso ainda não exista ou retorna o existente
+		user = (User*)AVL_insert(opes.AvlUsuarioByName, user)->key;
 		
 		//Lendo texto do tweet
 		countChar = 0;
-		int continue_ = 1;
 		do {
 			readChar = getc(file);
 			if (readChar == '#' || countHashtagChar != -1) { //Lê Hashtag
 				if (readChar == '#') { //Inicia leitura do nome da hashtag
-					countHashtagChar++;
-				} else if (readChar == ' ' || readChar != ';') { //Finaliza hashtag
-					hashtagName[countHashtagChar] = '\0';
+					hashtag = HashtagP_New(); //Inicializa uma nova hashtag
+					countHashtagChar = 0; //Zera o contador
+				} else if (readChar == ' ' || readChar == ';') { //Finaliza a leitura da hashtag
+					hashtag->name[countHashtagChar] = '\0';
 
-					hashtag = AVL_get(avlHashtagName, hashtagName)->key;
+					//Adiciona a nova hashtag na árvore caso ainda não exista ou retorna a existente
+					hashtag = (Hashtag*) AVL_insert(opes.AvlHashtagByTweetCount, hashtag)->key; 
 
-					//TO-DO: Procura hashtag na arvore. Se nao existir cria nova e adiciona na arvore, se existir apenas adiciona este Tweet a ela
-					hashtag = HashtagP_New();
-					strcpy(hashtag->name, hashtagName);
-					hashtag->tweetCount = 1;
-					hashtag->tweetList->Add(hashtag->tweetList, tweet);
-					//TO-DO: Adicionar na arvore
+					//Incrementa o número de tweets relacionados a ela e adiciona o tweet na sua lista
+					hashtag->tweetCount = hashtag->tweetCount + 1;
+					List_Add(hashtag->tweetList, tweet);
+
 					//Adiciona a Hashtag a lista de hashtags do Tweet
-					tweet->hashtagList->Add(tweet->hashtagList, hashtag);
-					countHashtagChar = -1;
+					List_Add(tweet->hashtagList, hashtag);
+					countHashtagChar = -1; //Finaliza o contador de leitura da hashtag
 				} else { //Segue lendo o nome da hashtag
-					hashtagName[countHashtagChar] = readChar;
+					hashtag->name[countHashtagChar] = CharUtils_toLowerCase(readChar);
 					countHashtagChar++;
 				}
-			} else if (readChar == '@' || countMentionChar != -1) { //Le mencao
-				if (readChar == '@') { //Inicializa leitura do nome do usuario mencionado
-					countMentionChar++;
-				} else if (readChar != ' ' || readChar !=  ';') { //Finaliza leitura
-					mentionUserName[countMentionChar] = '\0';
-					//TO-DO: Procura usuario na arvore. Se nao existir cria novo e adiciona na arvore, se existir adiciona este tweet a lista de mencoes
-					userMention = UserP_New();
-					strcpy(userMention->name, mentionUserName);
-					userMention->mentionTweetList->Add(userMention->mentionTweetList, tweet);
-					userMention->info.mentionCount = 1;
-					//TO-DO: Adicionar na arvore
+			} else if (readChar == '@' || countMentionChar != -1) { //Lê menção
+				if (readChar == '@') { //Inicializa leitura do nome do usuário mencionado
+					userMention = UserP_New(); //Inicializa novo usuário mencionado
+					countMentionChar = 0; //Zera o contador para sua string nome
+				} else if (readChar == ' ' || readChar ==  ';') { //Finaliza leitura
+					userMention->name[countMentionChar] = '\0';
+
+					//Adiciona o possível novo usuário na árvore caso ainda não exista ou retorna o existente
+					userMention = (User*)AVL_insert(opes.AvlUsuarioByName, userMention)->key;
+
+					//Adiciona a mencao na estrutura do usuário
+					List_Add(userMention->mentionTweetList, tweet);
+					userMention->info.mentionCount = userMention->info.mentionCount + 1; //Incrementa a contagem de menções
+
 					//Adiciona o usuario ao que o Tweet menciona
-					tweet->mentionList->Add(tweet->mentionList, userMention);
-					countMentionChar = -1;
+					List_Add(tweet->mentionList, userMention);
+
+					countMentionChar = -1; //Finaliza o contador de leitura da menção
 				} else { //Segue lendo o nome do usuario mencionado
-					mentionUserName[countMentionChar] = readChar;
+					userMention->name[countMentionChar] = CharUtils_toLowerCase(readChar);
 					countMentionChar++;
 				}
 			}
 
-			tweet->text[countChar] = readChar;
-			readChar++;
+			if (readChar != ';') {
+				tweet->text[countChar] = CharUtils_removeCharAccent(readChar);
+				countChar++;
+			}
+			else {
+				tweet->text[countChar] = '\0'; //Finaliza a leitura do texto do Tweet
+			}
 		} while (readChar != ';');
 
-		//Ler numero de re-tweets
-		countChar = 0;
+		//Le o numero de re-tweets
+		tweet->reTweetCount = File_readInt(file);
 
-		while ((readChar = getc(file)) != ';') {
-			number = number + (readChar * pow(BASE, countChar));
-			countChar++;
-		}
-
-		tweet->reTweetCount = number;
-
-		//Ler numero de likes
-		countChar = 0;
-
-		while ((readChar = getc(file)) != ';') {
-			number = number + (readChar * pow(BASE, countChar));
-			countChar++;
-		}
-
-		tweet->likeCount = number;
+		//Le o numero de likes
+		tweet->likeCount = File_readInt(file);
 
 		//Adiciona o Tweet a lista de tweets do usuario
 		User_AddTweet(user, tweet);
 
-		//TO-DO: Adicionar Tweet na sua arvore
+		//Adiciona o Tweet na sua árvore
+		AVL_insert(opes.AvlTweetByRetweetCount, tweet);
 	}
-//	return NULL; Funcao void
+	
+	return opes;
 }
 
-void exFile2(FILE *input2) {
+void File_exFile2(FILE *input2) {
 	/*
 	ArgumentsForOp arguments;
 	char op;

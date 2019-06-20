@@ -8,8 +8,7 @@ typedef struct s_Node {
 
 typedef struct s_List {
 	Node* header;
-	void (*Add) (struct s_List*, void*);
-	void* (*Get) (struct s_List*, int);
+	int length;
 } List;
 
 /*Retorna o enésimo elemento de uma lista.

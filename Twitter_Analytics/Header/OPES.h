@@ -1,3 +1,24 @@
+#include "./AVL.h"
+
+#define OP_NAME_MAX_CHAR_LENGTH 30
+
+typedef struct s_ArgumentsForOp {
+	char opChar;
+	int number;
+	char name[OP_NAME_MAX_CHAR_LENGTH];
+} ArgumentsForOp;
+
+ArgumentsForOp ArgumentsForOp_New();
+
+typedef struct s_OPES {
+	List* opsArguments; //Lista de ArgumentsForOp
+	AvlTree* AvlUsuarioByName;
+	AvlTree* AvlHashtagByTweetCount;
+	AvlTree* AvlTweetByRetweetCount;
+} OPES;
+
+OPES OPES_New();
+
 void opA(int qttHash, int qttCit); // Listar as hastags mais citadas em toda rede.
 void opB(int userQtt);   // Listar os usuários que mais postam tweets.
 void opC(int tweetsQtt); // Listar os tweets com maior número de retweets.

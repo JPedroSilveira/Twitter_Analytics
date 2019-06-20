@@ -5,7 +5,7 @@
 //Remove os acentos e o ç das strings
 void StringUtils_removeStringAccents(char* s);
 
-//Cria uma cópia da string em minusculo, utilize free quando não precisar mais da cópia
+//Passa a string para minusculo
 void StringUtils_toLowerCase(char* string);
 
 //Teste básico da função StringUtils_toLowerCase

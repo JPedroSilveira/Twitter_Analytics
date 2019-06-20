@@ -33,4 +33,10 @@ int CompareUtils_UserByName(User* a, User* b);
 //Retorna COMPARE_BIGGER caso o primeiro valor seja maior que o segundo
 //Retorna COMPARE_SMALLER caso o primeiro valor seja menor que o segundo
 //Retorna COMPARE_EQUAL caso ambos sejam iguais
-int CompareUtils_HashtagByName(Hashtag* a, Hashtag* b);
+int CompareUtils_HashtagByTweetCount(Hashtag* a, Hashtag* b);
+
+//Compara duas structs tweet pelo likeCount
+//Retorna COMPARE_BIGGER caso o primeiro valor seja maior que o segundo
+//Retorna COMPARE_SMALLER caso o primeiro valor seja menor que o segundo
+//Retorna COMPARE_EQUAL caso ambos sejam iguais
+int CompareUtils_TweetByReTweetCountAndText(Tweet* a, Tweet* b);

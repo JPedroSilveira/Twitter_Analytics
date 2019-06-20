@@ -2,7 +2,7 @@
 #include "./List.h"
 
 #define USER_NAME_LENGTH 50
-#define TWEET_TEXT_LENGTH 200
+#define TWEET_TEXT_LENGTH 280
 #define HASHTAG_NAME_LENGTH 50
 
 typedef struct s_UserInfo {

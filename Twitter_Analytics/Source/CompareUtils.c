@@ -47,6 +47,16 @@ int CompareUtils_UserByName(User* a, User* b) {
 	return CompareUtils_String(a->name, b->name);
 }
 
-int CompareUtils_HashtagByName(Hashtag* a, Hashtag* b) {
-	return CompareUtils_String(a->name, b->name);
+int CompareUtils_HashtagByTweetCount(Hashtag* a, Hashtag* b) {
+	int result = CompareUtils_Int(a->tweetCount, b->tweetCount);
+	if (result == COMPARE_EQUAL) {
+		return CompareUtils_String(a->name, b->name);
+	}
+}
+
+int CompareUtils_TweetByReTweetCountAndText(Tweet* a, Tweet* b) {
+	int result = CompareUtils_Int(&(a->likeCount), &(b->likeCount));
+	if (result == COMPARE_EQUAL) {
+		return CompareUtils_String(a->text, b->text);
+	}
 }

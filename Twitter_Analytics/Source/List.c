@@ -27,12 +27,14 @@ void List_Add(List* list, void* data) {
 		}
 		listNode->next = node;
 	}
+
+	//Incrementa a contagem de tamanho da lista
+	list->length = list->length + 1;
 }
 
 List* List_New() {
 	List* list = (List*)malloc(sizeof(List));
 	list->header = NULL;
-	list->Add = List_Add;
-	list->Get = List_Get;
+	list->length = 0;
 	return list;
 }

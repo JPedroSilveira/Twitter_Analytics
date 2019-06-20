@@ -57,6 +57,6 @@ void User_AddTweet(User* user, Tweet* tweet) {
 	user->info.tweetCount = user->info.tweetCount + 1; //Incrementa um a quantidade de Tweets do usuario
 	user->info.likeCount = user->info.likeCount + tweet->likeCount; //Incrementa o numero de likes que o usuario teve
 	user->info.retweetCount = user->info.retweetCount + tweet->reTweetCount; //Incrementa o numero de reTweets do usuario
-	user->tweetList->Add(user->tweetList, tweet); //Adiciona o Tweet na lista de Tweets do usuario
+	List_Add(user->tweetList, tweet); //Adiciona o Tweet na lista de Tweets do usuario
 }
 

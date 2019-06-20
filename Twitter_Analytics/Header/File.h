@@ -2,32 +2,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "./AVL.h"
+#include "./OPES.h"
 
-#define OP_NAME_MAX_CHAR_LENGTH 30
 #define BASE 10
-
-typedef struct s_ArgumentsForOp {
-	char opChar;
-	int number;
-	char name[OP_NAME_MAX_CHAR_LENGTH];
-} ArgumentsForOp;
 
 // Recebe a quantidade de parametros na chamada do programa
 // Caso seja maior que 3 (a.out, arquivo1, arquivo2) nao executa o programa
-int argumentsError(int argc);
+int File_argumentsError(int argc);
 
 //Retorna 1 caso tenha ocorrido erro ao abrir os arquivos e 0 caso contrário
-int filesError(FILE *input1, FILE *input2);
+int File_filesError(FILE *input1, FILE *input2);
 
-//Inicializa um novo ArgumentsForOp
-ArgumentsForOp ArgumentsForOp_New();
+//Le os dados do arquivos de Tweets e do arquivos contendo as operacoes e retorna na struct OPES
+OPES File_readFiles(FILE* fileTweets, FILE* fileOps);
 
 //Lê o arquivos com os dados das operações e salva em uma lista de ArgumentsForOp
-List* readArgumentsForOp(FILE *file);
+List* File_readArgumentsForOp(FILE *file);
 
 //Lê um valor inteiro em uma arquivos
-int readInt(FILE *file);
+int File_readInt(FILE *file);
 
 //Lê o arquivos dos Tweets
-void readTweets(FILE *file);
+OPES File_readTweets(FILE *file);
