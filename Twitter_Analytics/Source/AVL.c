@@ -85,6 +85,13 @@ AvlTreeNode* AVL_rightRotate(AvlTreeNode* root) {
 
 	//Troca os filhos
 	leftChild->mother = root->mother;
+	if (!AVL_nodeIsEmpty(root->mother)) {
+		if (AVL_isRigthChild(root)) {
+			root->mother->right = leftChild;
+		} else {
+			root->mother->left = leftChild;
+		}
+	}
 	root->mother = leftChild;
 
 	if (!AVL_nodeIsEmpty(rightChildLeft)) {
@@ -109,6 +116,14 @@ AvlTreeNode* AVL_leftRotate(AvlTreeNode* root) {
 
 	//Troca os filhos
 	rightChild->mother = root->mother;
+	if (!AVL_nodeIsEmpty(root->mother)) {
+		if (AVL_isRigthChild(root)) {
+			root->mother->right = rightChild;
+		} else {
+			root->mother->left = rightChild;
+		}
+	}
+
 	root->mother = rightChild;
 
 	if (!AVL_nodeIsEmpty(leftChildRight)) {
@@ -116,8 +131,8 @@ AvlTreeNode* AVL_leftRotate(AvlTreeNode* root) {
 	}
 
     // Atualiza a altura da árvore
+	root->height = CompareUtils_maxInt(AVL_height(root->left), AVL_height(root->right)) + 1;
 	rightChild->height = CompareUtils_maxInt(AVL_height(rightChild->left), AVL_height(rightChild->right))+1;
-	root->height = CompareUtils_maxInt(AVL_height(root->left), AVL_height(root->right))+1;
 
     // Retorna a nova raiz
     return rightChild;
@@ -125,7 +140,7 @@ AvlTreeNode* AVL_leftRotate(AvlTreeNode* root) {
 
 int AVL_getBalance(AvlTreeNode* node) {
 	if (node == NULL) {
-		return false;
+		return 0;
 	}
     return AVL_height(node->left) - AVL_height(node->right);
 } 
@@ -141,14 +156,70 @@ AvlTreeNode* AVL_insertChar(AvlTree* tree, char key) {
 	char* memoryKey = (char*)malloc(sizeof(char));
 	*memoryKey = key;
 
-	return AVL_insert(tree, memoryKey);
+	return AVL_insert(tree, NULL, memoryKey);
 }
 
 AvlTreeNode* AVL_insertString(AvlTree* tree, char* key) {
 	char* memoryKey = malloc(sizeof(char*));
 	strcpy(memoryKey, key);
 
-	return AVL_insert(tree, memoryKey);
+	return AVL_insert(tree, NULL, memoryKey);
+}
+
+AvlTreeNode* AVL_balanceNode(AvlTreeNode* node) {
+	AvlTreeNode* _return = node;
+
+	//Verifica se o nó existe
+	if (!AVL_nodeIsEmpty(node)) {
+		//Busca o fator de balanceamento do nó
+		int balance = AVL_getBalance(node);
+		int time = 0;
+
+		//Realiza o procedimento até o nó estar balanceado
+		while (balance > 1 || balance < -1) {
+			if (balance > 1) { //Positivo - Rotação direita
+				balance = AVL_getBalance(node->left);
+				if (balance >= 0) {
+					//Rotação simples direita
+					if (time == 0) {
+						_return = AVL_rightRotate(node);
+					} else {
+						AVL_rightRotate(node);
+					}
+				} else if (balance < 0) {
+					//Rotação dupla direita
+					node->left = AVL_leftRotate(node->left);
+					if (time == 0) {
+						_return = AVL_rightRotate(node);
+					} else {
+						AVL_rightRotate(node);
+					}
+				}
+			} else if (balance < -1) { //Negativo - Rotação esquerda
+				balance = AVL_getBalance(node->right);
+				if (balance > 0) {
+					//Rotação dupla esquerda
+					node->right = AVL_rightRotate(node->right);
+					if (time == 0) {
+						_return = AVL_leftRotate(node);
+					} else {
+						AVL_leftRotate(node);
+					}
+				} else if (balance <= 0) {
+					//Rotação simples esquerda
+					if (time == 0) {
+						_return = AVL_leftRotate(node);
+					} else {
+						AVL_leftRotate(node);
+					}
+				}
+			}
+			time++;
+			balance = AVL_getBalance(node);
+		}
+	}
+
+	return _return;
 }
 
 AvlTreeNode* AVL_insert(AvlTree* tree, AvlTreeNode* mother, void* key) {
@@ -192,117 +263,115 @@ AvlTreeNode* AVL_insert(AvlTree* tree, AvlTreeNode* mother, void* key) {
 		// 2. Atualiza a altura do seu nodo antecessor
 		tree->root->height = 1 + CompareUtils_maxInt(AVL_height(tree->root->left), AVL_height(tree->root->right));
 
-		// 3. Pega o fator de balanceamente do nodo antecessor e verifica se a árvore está desbalanceada
-		int balance = AVL_getBalance(tree->root);
-
-		// Em caso de nodo desbalanceado verificar qual o caso e re-balanceia
-
-
-		if (balance > 1 && tree->compare(key, tree->root->left->key) == COMPARE_SMALLER) { // Esquerda Esquerda
-			tree->root = AVL_rightRotate(tree->root);
-		} else if (balance < -1 && tree->compare(key, tree->root->right->key) == COMPARE_BIGGER) { // Direita Direita
-			tree->root = AVL_leftRotate(tree->root);
-		} else if (balance > 1 && tree->compare(key, tree->root->left->key) == COMPARE_BIGGER) { // Esquerda Direita 
-			tree->root->left = AVL_leftRotate(tree->root->left);
-			tree->root = AVL_rightRotate(tree->root);
-		} else if (balance < -1 && tree->compare(key, tree->root->right->key) == COMPARE_SMALLER) { // Direita Esquerda
-			tree->root->right = AVL_rightRotate(tree->root->right);
-			tree->root = AVL_leftRotate(tree->root);
-		}
+		// 3. Balanceia o nodo antecessor
+		tree->root = AVL_balanceNode(tree->root);
 	}
 
     //Retorna o novo nodo
 	return newNode;
 }
 
-void AVL_remove(AvlTree* tree, AvlTreeNode* nodeToRemove, void* key) {
-	if (AVL_nodeIsEmpty(nodeToRemove)) { //Verifica se o nodo existe
-		
-		//Caso for raiz da árvore apenas remove a raiz
-		if (tree->root == nodeToRemove) { 
-			tree->root = NULL;
-		} else {
-			//Casos com nó mãe
-			if (AVL_isLeaf(nodeToRemove)) { //Caso seja folha apenas o remove
-				if (AVL_isRigthChild(nodeToRemove)) { //Se for filho direito
-					nodeToRemove->mother->right = NULL; //Remove o filho direita da sua mãe
+void AVL_remove(AvlTree* tree, AvlTreeNode* nodeToRemove) {
+	//Valida se a chave existe na árvore
+	nodeToRemove = AVL_get(tree, nodeToRemove->key);
+
+	if (!AVL_nodeIsEmpty(nodeToRemove)) { //Verifica se o nodo existe
+		//Caso tenha dois filhos
+		AvlTreeNode* deepestNodeToMove = NULL;
+
+		if (AVL_isLeaf(nodeToRemove)) { 
+			//Caso seja folha apenas o remove
+			if (!AVL_nodeIsEmpty(nodeToRemove->mother)) {
+				if (AVL_isRigthChild(nodeToRemove)) {
+					nodeToRemove->mother->right = NULL;
 				}
 				else { //Se for filho esquerdo
-					nodeToRemove->mother->left = NULL; //Remove o filho esquerdo da sua mãe
+					nodeToRemove->mother->left = NULL;
+				}
+				deepestNodeToMove = nodeToRemove->mother;
+			} else {
+				tree->root = NULL;
+			}
+		} else {
+			//Caso tenha filhos
+
+			//Busca se possui apenas um filho
+			AvlTreeNode* onlyChild = AVL_hasJustOneSubTree(nodeToRemove); 
+
+			if (!AVL_nodeIsEmpty(onlyChild)) { 
+				//Caso tenha apenas um filho basta apontar sua mãe para o seu filho
+				if (!AVL_nodeIsEmpty(nodeToRemove->mother)) {
+					if (AVL_isRigthChild(nodeToRemove)) {
+						nodeToRemove->mother->right = onlyChild;
+					}
+					else {
+						nodeToRemove->mother->left = onlyChild;
+					}
+				} else {
+					tree->root = onlyChild;
+				}
+				
+				onlyChild->mother = deepestNodeToMove = nodeToRemove->mother;
+			} else { 
+				//Busca o menor filho para substituir o nó removido
+				AvlTreeNode* smallestChild = AVL_getSmallestChild(nodeToRemove); 
+
+				//Remove a ligação da antiga mãe do menor filho do nó a ser removido
+				smallestChild->mother->left = NULL;
+
+				//Troca a referência da mãe do nó a ser removido para o substituto
+				if (!AVL_nodeIsEmpty(nodeToRemove->mother)) {
+					if (AVL_isRigthChild(nodeToRemove)) {
+						//Se o nó a ser removido for filho direito
+						nodeToRemove->mother->right = smallestChild;
+					} else {
+						//Se o nó a ser removido for filho esquerdo
+						nodeToRemove->mother->left = smallestChild;
+					}
+				} else {
+					tree->root = smallestChild;
 				}
 
-				//Atualiza a altura do seu nodo mãe
-				nodeToRemove->mother->height = 1 + CompareUtils_maxInt(AVL_height(nodeToRemove->mother->left), AVL_height(nodeToRemove->mother->right));
-			} else { //Caso tenha filhos
-				AvlTreeNode* onlyChild = AVL_hasJustOneSubTree(nodeToRemove); //Busca se possui apenas um filho
+				smallestChild->mother = nodeToRemove->mother;
 
-				if (!AVL_nodeIsEmpty(onlyChild)) { //Caso tenha apenas um filho
-					if (AVL_isRigthChild(nodeToRemove)) { //Se o nó a ser removido for filho direito
-						nodeToRemove->mother->right = onlyChild; //Passa o filho do nó removido como filho direito no seu lugar
-					}
-					else { //Se for filho esquerdo
-						nodeToRemove->mother->left = onlyChild; //Passa o filho do nó removido como filho esquerdo no seu lugar
-					}
+				if (!AVL_isLeaf(smallestChild)) { 
+					//Caso o nó mais profundo das sub-árvores esquerdas não for nó folha
+					//Pega seu nó mais profundo direito para salvar como pai da sub-árvore esquerda e direita do nó removido 
+					deepestNodeToMove = AVL_getBiggestChild(smallestChild);
+				} else {
+					//Caso não, segue com o menor nó para salva-lo como pai da sub-árvore esquerda e direita do nó removido 
+					deepestNodeToMove = smallestChild;
+				}
 
-					//Atualiza a altura do seu nodo mãe
-					nodeToRemove->mother->height = 1 + CompareUtils_maxInt(AVL_height(nodeToRemove->mother->left), AVL_height(nodeToRemove->mother->right));
-				} else { //Caso tenha dois filhos
+				//Verifica se o nó removido possui sub-árvore esquerda para fazer a mudança
+				if (!AVL_nodeIsEmpty(nodeToRemove->left)) {
+					deepestNodeToMove->right = nodeToRemove->left;
+					nodeToRemove->left->mother = deepestNodeToMove;
+							
+					//Atualiza o maior nó para a nova sub-árvore direita
+					deepestNodeToMove = AVL_getBiggestChild(deepestNodeToMove);
+				}
 
-					AvlTreeNode* smallestChild = AVL_getSmallestChild(nodeToRemove); //Busca o menor filho para substituir o nó removido
-					AvlTreeNode* temp; //Nodo temporário
-
-					//Remove a ligação da antiga mãe do menor filho do nó a ser removido (O menor filho sempre é folha)
-					if (AVL_isRigthChild(smallestChild)) { //Se o nó a ser removido for filho direito
-						smallestChild->mother->right = NULL; //Salva o menor filho no lugar do nó removido
-					} else { //Se o nó a ser removido for filho esquerdo
-						smallestChild->mother->left = NULL;
-					}
-
-					//Troca o filho da mãe do nó a ser removido
-					if (AVL_isRigthChild(nodeToRemove)) { //Se o nó a ser removido for filho direito
-						nodeToRemove->mother->right = smallestChild;
-						smallestChild->mother = nodeToRemove->mother;
-					} else { //Se o nó a ser removido for filho esquerdo
-						nodeToRemove->mother->left = smallestChild;
-						smallestChild->mother = nodeToRemove->mother;
-					}
-
-					if (AVL_isLeaf(smallestChild)) { //Caso o menor filho for folha apenas salva seus filhos como o filho do nó a ser removido
-						smallestChild->right = nodeToRemove->right;
-						nodeToRemove->right->mother = smallestChild;
-
-						smallestChild->left = nodeToRemove->left;
-						nodeToRemove->left->mother = smallestChild;
-
-						temp = smallestChild;
-
-						//Correção de balanceamento
-						while (temp != tree->root) {
-							//Atualiza a altura do nodo mais profundo movido até a raiz
-							temp->height = 1 + CompareUtils_maxInt(AVL_height(temp->left), AVL_height(temp->right));
-							temp = temp->mother;
-						}
-					} else { //Se não for folha então possui apenas filho a direita
-						AvlTreeNode* biggestChild = AVL_getBiggestChild(nodeToRemove); //Busca o maior filho do menor filho do nó removido (nó folha)
-
-						//Salva ele como mãe do filho direito do novo removido
-						biggestChild->right = nodeToRemove->right;
-						nodeToRemove->right->mother = biggestChild;
-						
-						temp = biggestChild;
-
-						//Correção de balanceamento
-						while (temp != tree->root) {
-							//Atualiza a altura do nodo mais profundo movido até a raiz
-							temp->height = 1 + CompareUtils_maxInt(AVL_height(temp->left), AVL_height(temp->right));
-							temp = temp->mother;
-						}
-					}
+				//Salva a sub-árvore direita do nó removido
+				deepestNodeToMove->right = nodeToRemove->right;
+				if (!AVL_nodeIsEmpty(nodeToRemove->right)) {
+					nodeToRemove->right->mother = deepestNodeToMove;
 				}
 			}
+		} 
+
+		//Correção de altura e balanceamento
+		while (!AVL_nodeIsEmpty(deepestNodeToMove)) {
+			//Atualiza a altura do nodo mais profundo movido até a raiz
+			deepestNodeToMove->height = 1 + CompareUtils_maxInt(AVL_height(deepestNodeToMove->left), AVL_height(deepestNodeToMove->right));
+			AVL_balanceNode(deepestNodeToMove);
+			deepestNodeToMove = deepestNodeToMove->mother;
 		}
-	} else {
-		return NULL;
+
+		//Corrigir root da árvore
+		while (!AVL_nodeIsEmpty(tree->root) && !AVL_nodeIsEmpty(tree->root->mother)) {
+			tree->root = tree->root->mother;
+		}
 	}
 }
 
@@ -326,15 +395,15 @@ AvlTreeNode* AVL_hasJustOneSubTree(AvlTreeNode* node) {
 
 AvlTreeNode* AVL_getSmallestChild(AvlTreeNode* node) {
 	if (node->left != NULL) { //Caso tenha filho a esquerda continua a recursão
-		return AVL_getSmallerChild(node->left);
+		return AVL_getSmallestChild(node->left);
 	} else { //Caso não returna o nó
 		return node;
 	}
 }
 
 AvlTreeNode* AVL_getBiggestChild(AvlTreeNode* node) {
-	if (node->left != NULL) { //Caso tenha filho a esquerda continua a recursão
-		return AVL_getSmallerChild(node->left);
+	if (node->right != NULL) { //Caso tenha filho a esquerda continua a recursão
+		return AVL_getBiggestChild(node->right);
 	}
 	else { //Caso não returna o nó
 		return node;
@@ -348,26 +417,29 @@ int AVL_isRigthChild(AvlTreeNode* node) {
 AvlTreeNode* AVL_get(AvlTree* tree, void* key) {
 	AvlTreeNode* root = tree->root;
 	AvlTreeNode* node = NULL;
-	int compareResult = tree->compare(key, root->key);
 
-	if (compareResult == COMPARE_BIGGER) {
-		tree->root = root->right; //Pega sub-arvore direita
-		node = AVL_get(tree, key);
-	} else if (compareResult == COMPARE_SMALLER){
-		tree->root = root->left; //Pega sub-arvore esquerda
-		node = AVL_get(tree, key);
+	if (!AVL_nodeIsEmpty(root)) {
+		int compareResult = tree->compare(key, root->key);
+
+		if (compareResult == COMPARE_BIGGER) {
+			tree->root = root->right; //Pega sub-arvore direita
+			node = AVL_get(tree, key);
+		}
+		else if (compareResult == COMPARE_SMALLER) {
+			tree->root = root->left; //Pega sub-arvore esquerda
+			node = AVL_get(tree, key);
+		}
+		else if (compareResult == COMPARE_EQUAL) {
+			return root; //Retorna o proprio nodo
+		}
+
+		tree->root = root; //Restaura a raiz da sub-arvore
 	}
-	else if(compareResult == COMPARE_EQUAL){
-		return root; //Retorna o proprio nodo
-	}
-
-	tree->root = root; //Restaura a raiz da sub-arvore
-
+	
 	return node; //Retorna o nodo encontrado ou NULL
 }
 
-AvlTreeNode* AVL_getInt(AvlTree* tree, int key)
-{
+AvlTreeNode* AVL_getInt(AvlTree* tree, int key) {
 	return AVL_get(tree, &key);
 }
 
@@ -381,58 +453,146 @@ AvlTreeNode* AVL_getString(AvlTree* tree, char* key)
 	return AVL_get(tree, key);
 }
 
-void AVL_preOrderInt(AvlTree* tree) {
-	if (tree != NULL && tree->root != NULL) {
-		AvlTreeNode* root = tree->root;
+void AVL_preOrderInt(AvlTreeNode* root) {
+	if (!AVL_nodeIsEmpty(root)) {
+		AvlTreeNode* temp = root;
+
         printf("%d ", *((int*)(root->key)));
 
-		tree->root = root->left;
-		AVL_preOrderInt(tree);
+		temp = root->left;
+		AVL_preOrderInt(temp);
 
-		tree->root = root->right;
-		AVL_preOrderInt(tree);
+		temp = root->right;
+		AVL_preOrderInt(temp);
     } 
 } 
 
-void AVL_preOrderChar(AvlTree* tree) {
-	if (tree != NULL && tree->root != NULL) {
-		AvlTreeNode* root = tree->root;
+void AVL_preOrderChar(AvlTreeNode* root) {
+	if (!AVL_nodeIsEmpty(root)) {
 		printf("%c ", *((char*)(root->key)));
 
-		tree->root = root->left;
-		AVL_preOrderChar(tree);
+		root = root->left;
+		AVL_preOrderChar(root);
 
-		tree->root = root->right;
-		AVL_preOrderChar(tree);
+		root = root->right;
+		AVL_preOrderChar(root);
 	}
 }
 
-void AVL_preOrderString(AvlTree* tree) {
-	if (tree != NULL && tree->root != NULL) {
-		AvlTreeNode* root = tree->root;
+void AVL_preOrderString(AvlTreeNode* root) {
+	if (!AVL_nodeIsEmpty(root)) {
 		printf("%s ", ((char*)(root->key)));
 
-		tree->root = root->left;
-		AVL_preOrderString(tree);
+		root = root->left;
+		AVL_preOrderString(root);
 
-		tree->root = root->right;
-		AVL_preOrderString(tree);
+		root = root->right;
+		AVL_preOrderString(root);
 	}
 }
 
 void AVL_testInt() {
 	AvlTree* tree = AVL_newTreeInt();
 
-    AvlTreeNode* teste = AVL_insertInt(tree, 10);
-	teste = AVL_insertInt(tree, 20);
-	teste = AVL_insertInt(tree, 30);
-	teste = AVL_insertInt(tree, 40);
-	teste = AVL_insertInt(tree, 50);
-    teste = AVL_insertInt(tree, 25);
+	AvlTreeNode* testeXVIII = AVL_insertInt(tree, 10);
+	AvlTreeNode* teste = AVL_insertInt(tree, 20);
+	AvlTreeNode* testeXI = AVL_insertInt(tree, 30);
+	AvlTreeNode* teste3 = AVL_insertInt(tree, 40);
+	AvlTreeNode* testeXVII = AVL_insertInt(tree, 50);
+	AvlTreeNode* testeXVI = AVL_insertInt(tree, 25);
+	AvlTreeNode* testeX = AVL_insertInt(tree, 38);
+	AvlTreeNode* teste2 = AVL_insertInt(tree, 5);
+	AvlTreeNode* testeXII = AVL_insertInt(tree, 22);
+	AvlTreeNode* teste4 = AVL_insertInt(tree, 15);
+	AvlTreeNode* testeXV = AVL_insertInt(tree, 27);
+	AvlTreeNode* teste6 = AVL_insertInt(tree, 37);
+	AvlTreeNode* teste5 = AVL_insertInt(tree, 100);
+	AvlTreeNode* testeXIII = AVL_insertInt(tree, 23);
+	AvlTreeNode* testeXIV = AVL_insertInt(tree, 7);
+	AVL_preOrderInt(tree->root);
 
 	printf("\nBuscando por 40, resultado: %d \n", *((int*)AVL_getInt(tree, 40)->key));
 
-    AVL_preOrderInt(tree);
+	AVL_remove(tree, teste);
+    AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, teste);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, teste2);
+	AVL_preOrderInt(tree->root); 
+	printf("\n\n");
+
+	AVL_remove(tree, teste3);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, teste4);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, teste4);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, teste5);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, teste6);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, testeX);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, testeX);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, testeXI);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, testeXII);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, testeXII);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, testeXIII);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, testeXIV);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, testeXV);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, testeXVI);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, testeXVII);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, testeXVIII);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+
+	AVL_remove(tree, teste);
+	AVL_preOrderInt(tree->root);
+	printf("\n\n");
+	
 } 
 
 void AVL_testChar() {
@@ -447,7 +607,7 @@ void AVL_testChar() {
 
 	printf("\nBuscando por d, resultado: %c \n", *((char*)AVL_getChar(tree, 'd')->key));
 
-	AVL_preOrderChar(tree);
+	AVL_preOrderChar(tree->root);
 
 }
 
@@ -463,7 +623,7 @@ void AVL_testString() {
 
 	printf("\nBuscando por abacaxi, resultado: %s \n", (char*)(AVL_getString(tree, "abacaxi")->key));
 
-	AVL_preOrderString(tree);
+	AVL_preOrderString(tree->root);
 }
 
 

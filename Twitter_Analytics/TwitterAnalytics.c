@@ -1,6 +1,9 @@
 #include "./Header/TwitterAnalytics.h"
 
 int main(int argc, char *argv[]) {
+
+	AVL_testInt();
+	/*
 	if (File_argumentsError(argc)) return 0;
 
 	FILE *file1, *file2, *OUTPUT;
@@ -19,7 +22,7 @@ int main(int argc, char *argv[]) {
 		printf("%c\n", teste->opChar);
 		printf("%d\n", teste->number);
 		printf("%s\n", teste->name);
-	}
+	}*/
 
     return 0;
 }

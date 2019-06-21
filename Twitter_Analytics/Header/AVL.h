@@ -67,7 +67,7 @@ AvlTreeNode* AVL_insertString(AvlTree* tree, char* key);
 AvlTreeNode* AVL_insert(AvlTree* tree, AvlTreeNode* mother, void* key);
 
 /*Remove um nodo da árvore*/
-void AVL_remove(AvlTree* tree, AvlTreeNode* nodeToRemove, void* key);
+void AVL_remove(AvlTree* tree, AvlTreeNode* nodeToRemove);
 
 /*Recebe um nó e retorna verdadeiro caso ele seja um nó folha*/
 int AVL_isLeaf(AvlTreeNode* node);
@@ -97,13 +97,13 @@ AvlTreeNode* AVL_getChar(AvlTree* tree, char key);
 AvlTreeNode* AVL_getString(AvlTree* tree, char* key);
 
 //Imprime a árvore pré-ordenada e a altura de cada nodo INT
-void AVL_preOrderInt(AvlTree* tree);
+void AVL_preOrderInt(AvlTreeNode* root);
 
 //Imprime a árvore pré-ordenada e a altura de cada nodo CHAR
-void AVL_preOrderChar(AvlTree* tree);
+void AVL_preOrderChar(AvlTreeNode* root);
 
 //Imprime a árvore pré-ordenada e a altura de cada nodo STRING
-void AVL_preOrderString(AvlTree* tree);
+void AVL_preOrderString(AvlTreeNode* root);
 
 //Teste básico para AVL com chaves tipo INT
 void AVL_testInt();
