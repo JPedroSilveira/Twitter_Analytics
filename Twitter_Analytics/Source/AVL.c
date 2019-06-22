@@ -1,5 +1,4 @@
 #include "../Header/AVL.h"
-#include "../Header/Boolean.h"
 
 int AVL_height(AvlTreeNode* node) {
 	if (node == NULL) {
@@ -48,10 +47,50 @@ AvlTree* AVL_newTreeUserByName() {
 	return tree;
 }
 
+AvlTree* AVL_newTreeUserByTweetCount() {
+	AvlTree* tree = (AvlTree*)malloc(sizeof(AvlTree));
+	tree->root = NULL;
+	tree->compare = CompareUtils_UserByTweetCount;
+
+	return tree;
+}
+
+AvlTree* AVL_newTreeUserByMentionCount() {
+	AvlTree* tree = (AvlTree*)malloc(sizeof(AvlTree));
+	tree->root = NULL;
+	tree->compare = CompareUtils_UserByMentionCount;
+
+	return tree;
+}
+
+AvlTree* AVL_newTreeUserByRetweetCount() {
+	AvlTree* tree = (AvlTree*)malloc(sizeof(AvlTree));
+	tree->root = NULL;
+	tree->compare = CompareUtils_UserByRetweetCount;
+
+	return tree;
+}
+
+AvlTree* Avl_newTreeUserByEngagementCount() {
+	AvlTree* tree = (AvlTree*)malloc(sizeof(AvlTree));
+	tree->root = NULL;
+	tree->compare = CompareUtils_UserByEngagementCount;
+
+	return tree;
+}
+
 AvlTree* AVL_newTreeHashtagByTweetCount() {
 	AvlTree* tree = (AvlTree*)malloc(sizeof(AvlTree));
 	tree->root = NULL;
 	tree->compare = CompareUtils_HashtagByTweetCount;
+
+	return tree;
+}
+
+AvlTree* AVL_newTreeHashtagByName() {
+	AvlTree* tree = (AvlTree*)malloc(sizeof(AvlTree));
+	tree->root = NULL;
+	tree->compare = CompareUtils_HashtagByName;
 
 	return tree;
 }

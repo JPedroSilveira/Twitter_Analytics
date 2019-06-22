@@ -1,4 +1,9 @@
+#ifndef _OPESH_
+#define _OPESH_
+
 #include "./AVL.h"
+#include "./List.h"
+#include <math.h>
 
 #define OP_NAME_MAX_CHAR_LENGTH 30
 
@@ -10,18 +15,56 @@ typedef struct s_ArgumentsForOp {
 
 ArgumentsForOp ArgumentsForOp_New();
 
+typedef struct s_OPESResult {
+	List* associatedHashtags;
+	List* hashtagsMaisCitadas;
+	List* usuarioComMaisTweets;
+	List* tweetsComMaisRetweets;
+	List* usuariosMaisMencionados;
+	List* usuariosMaisInfluentes;
+	List* usuariosMaisEngajados;
+} OPESResult;
+
+OPESResult OPESResult_New();
+
 typedef struct s_OPES {
 	List* opsArguments; //Lista de ArgumentsForOp
-	AvlTree* AvlUsuarioByName;
+	AvlTree* AvlUserByName;
+	AvlTree* AvlUserByTweetCount;
+	AvlTree* AvlUserByMentionCount;
+	AvlTree* AvlUserByRetweetCount;
+	AvlTree* AvlUserByEngagementCount;
 	AvlTree* AvlHashtagByTweetCount;
+	AvlTree* AvlHashtagByName;
 	AvlTree* AvlTweetByRetweetCount;
+	OPESResult opesResult;
 } OPES;
 
 OPES OPES_New();
 
-void opA(int qttHash, int qttCit); // Listar as hastags mais citadas em toda rede.
-void opB(int userQtt);   // Listar os usuários que mais postam tweets.
-void opC(int tweetsQtt); // Listar os tweets com maior número de retweets.
-void opD(int userQtt);   // Listar os usuários mais mencionados nos tweets.
-void opE(int userQtt);   // Listar os usuários mais influentes (aquele que possui o maior número de retweets.)
-void opF(int userQtt);   // Listar os usuários mais engajados da rede. Engajamento é a interação do público com as postagens do usuário e determina o alcance das postagens. O engajamento é contabilizado pela somatório da quantidade de interações dos tweets de um usuário, que inclui: gostar do tweet (like), quantidade de retweets e quantidade de menções ao usuário.
+//Dado o nodo raiz de uma árvore binária de pesquisa converte para uma lista decrescente
+void ConvertTreeToListDesc(AvlTreeNode* mother, int* count, List* result);
+
+// Listar as hastags mais citadas em toda rede.
+void OPES_A_HashtagMaisCitadas(OPES* opes); 
+
+// Listar os usuários que mais postam tweets.
+void OPES_B_UsuariosComMaisTweets(OPES* opes);   
+
+// Listar os tweets com maior número de retweets.
+void OPES_C_TweetsComMaiorNumeroDeRetweets(OPES* opes);
+
+// Listar os usuários mais mencionados nos tweets.
+void OPES_D_UsuariosMaisMencionados(OPES* opes);
+
+// Listar os usuários mais influentes (aquele que possui o maior número de retweets.)
+void OPES_E_UsuariosMaisInfluentes(OPES* opes);
+
+// Listar os usuários mais engajados da rede. Engajamento é a interação do público com as postagens do usuário e determina o alcance das postagens. O engajamento é contabilizado pela somatório da quantidade de interações dos tweets de um usuário, que inclui: gostar do tweet (like), quantidade de retweets e quantidade de menções ao usuário.
+void OPES_F_UsuariosMaisEngajados(OPES* opes);
+							
+//Lista os termos associados a uma hashtag dada
+void OPES_G_TermosAssociados(OPES* opes); 
+
+
+#endif _OPESH_

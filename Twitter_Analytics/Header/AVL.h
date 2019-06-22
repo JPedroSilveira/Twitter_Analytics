@@ -1,5 +1,9 @@
+#ifndef _AVLH_
+#define _AVLH_
+
 #include <stdio.h>
 #include <stdlib.h> 
+#include "./Boolean.h"
 #include "./CompareUtils.h"
 
 //Nodo da árvore
@@ -35,8 +39,23 @@ AvlTree* AVL_newTreeString();
 //Cria uma nova árvore com chave User.name
 AvlTree* AVL_newTreeUserByName();
 
-//Cria uma nova árvore com chave Hashtag.name
+//Cria uma nova árvore com chave length da lista de Tweets do Usuário
+AvlTree* AVL_newTreeUserByTweetCount();
+
+//Cria uma nova árvore com chave length da lista de menções do Usuário
+AvlTree* AVL_newTreeUserByMentionCount();
+
+//Cria uma nova árvore com chave user.RetweetCount
+AvlTree* AVL_newTreeUserByRetweetCount();
+
+//Cria uma nova árvore com chave user.info.engagement
+AvlTree* Avl_newTreeUserByEngagementCount();
+
+//Cria uma nova árvore com chave length da lista de Tweets da Hashtag
 AvlTree* AVL_newTreeHashtagByTweetCount();
+
+//Cria uma nova árvore com chave Hashtag.name
+AvlTree* AVL_newTreeHashtagByName();
 
 //Cria uma nova árvore com chave Tweet.retweetCount
 AvlTree * AVL_newTreeTweetByRetweetCount();
@@ -87,6 +106,9 @@ int AVL_isRigthChild(AvlTreeNode* node);
 /*Busca um nodo na arvore por um endereco de valor, caso nao ache retorna NULL*/
 AvlTreeNode* AVL_get(AvlTree* tree, void* key);
 
+/*Busca um nodo na arvore por um endereco de valor com a função de comparação por nome, caso nao ache retorna NULL*/
+AvlTreeNode* AVL_getByName(AvlTree* tree, void* key);
+
 /*Busca um nodo na arvore por um valor INT, caso nao ache retorna NULL*/
 AvlTreeNode* AVL_getInt(AvlTree* tree, int key);
 
@@ -113,3 +135,5 @@ void AVL_testChar();
 
 //Teste básico para AVL com chaves tipo STRING
 void AVL_testString();
+
+#endif _AVLH_

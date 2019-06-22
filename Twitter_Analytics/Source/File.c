@@ -1,5 +1,4 @@
 #include "../Header/File.h"
-#include "../Header/CharUtils.h"
 
 int File_argumentsError(int argc) {
 	if (argc > 3) {
@@ -18,8 +17,9 @@ int File_filesError(FILE *input1, FILE *input2) {
 }
 
 OPES File_readFiles(FILE* fileTweets, FILE* fileOps) {
-	OPES opes = File_readTweets(fileTweets);
+	OPES opes = OPES_New();
 	opes.opsArguments = File_readArgumentsForOp(fileOps);
+	opes = File_readTweets(opes, fileTweets);
 
 	return opes;
 }
@@ -85,10 +85,9 @@ int File_readIntAux(FILE *file, int *count) {
 	}
 }
 
-OPES File_readTweets(FILE * file) {
+OPES File_readTweets(OPES opes, FILE * file) {
 	char readChar;
-	int countChar, countHashtagChar = -1, countMentionChar = -1, number = 0;
-	OPES opes = OPES_New();
+	int countChar, countHashtagChar = -1, countMentionChar = -1, number = 0, isAssociated = 0;
 
 	while ((readChar = getc(file)) != EOF) {
 		Tweet* tweet = TweetP_New();
@@ -111,8 +110,21 @@ OPES File_readTweets(FILE * file) {
 		user->name[countChar + 1] = '\0'; //Finaliza a leitura do nome do usuario
 
 		//Adiciona o novo usuário na árvore caso ainda não exista ou retorna o existente
-		user = (User*)AVL_insert(opes.AvlUsuarioByName, NULL, user)->key;
+		AvlTreeNode* userNode = (User*)AVL_insert(opes.AvlUserByName, NULL, user);
 		
+		if (!AVL_nodeIsEmpty(userNode)) {
+			user = userNode->key;
+
+			//Remove o user da árvore por contagem de tweets
+			AVL_remove(opes.AvlUserByTweetCount, userNode);
+
+			//Remove o user da árvore por contagem de retweets
+			AVL_remove(opes.AvlUserByRetweetCount, userNode);
+
+			//Remove o user da árvore para contagem de engajamento
+			AVL_remove(opes.AvlUserByEngagementCount, userNode);
+		}
+
 		//Lendo texto do tweet
 		countChar = 0;
 		do {
@@ -124,15 +136,29 @@ OPES File_readTweets(FILE * file) {
 				} else if (readChar == ' ' || readChar == ';') { //Finaliza a leitura da hashtag
 					hashtag->name[countHashtagChar] = '\0';
 
-					//Adiciona a nova hashtag na árvore caso ainda não exista ou retorna a existente
-					hashtag = (Hashtag*) AVL_insert(opes.AvlHashtagByTweetCount, NULL, hashtag)->key;
+					//Busca a hashtag pelo nome
+					AvlTreeNode* hashtagNode = AVL_get(opes.AvlHashtagByName, hashtag);
 
-					//Incrementa o número de tweets relacionados a ela e adiciona o tweet na sua lista
-					hashtag->tweetCount = hashtag->tweetCount + 1;
+					if (!AVL_nodeIsEmpty(hashtagNode)) {
+						hashtag = hashtagNode->key;
+
+						//Remove a hashtag
+						AVL_remove(opes.AvlHashtagByTweetCount, hashtagNode);
+					} else {
+						//Se não estiver na árvore ordenada por nome então é nova
+						//Adiciona na árvore
+						AVL_insert(opes.AvlHashtagByName, NULL, hashtag);
+					}
+
+					//Adiciona o tweet na sua lista
 					List_Add(hashtag->tweetList, tweet);
 
 					//Adiciona a Hashtag a lista de hashtags do Tweet
 					List_Add(tweet->hashtagList, hashtag);
+
+					//Adiciona a nova hashtag na árvore
+					AVL_insert(opes.AvlHashtagByTweetCount, NULL, hashtag);
+					
 					countHashtagChar = -1; //Finaliza o contador de leitura da hashtag
 				} else { //Segue lendo o nome da hashtag
 					hashtag->name[countHashtagChar] = CharUtils_toLowerCase(readChar);
@@ -145,15 +171,33 @@ OPES File_readTweets(FILE * file) {
 				} else if (readChar == ' ' || readChar ==  ';') { //Finaliza leitura
 					userMention->name[countMentionChar] = '\0';
 
-					//Adiciona o possível novo usuário na árvore caso ainda não exista ou retorna o existente
-					userMention = (User*)AVL_insert(opes.AvlUsuarioByName, NULL, userMention)->key;
+					//Busca o usuário pelo nome
+					AvlTreeNode* userMentionNode = AVL_get(opes.AvlUserByName, userMention);
+
+					if (!AVL_nodeIsEmpty(userMentionNode)) { //Já está inserido em ambas as árvores de usuário
+						userMention = userMentionNode->key;
+
+						//Remove o usuário para re-inserir ordenado
+						AVL_remove(opes.AvlUserByMentionCount, userMentionNode);
+						AVL_remove(opes.AvlUserByEngagementCount, userMentionNode);
+					} else {
+						//Se não estiver na árvore ordenada por nome então é nova
+						//Adiciona na árvore
+						AVL_insert(opes.AvlUserByName, NULL, userMention);
+					}
 
 					//Adiciona a mencao na estrutura do usuário
 					List_Add(userMention->mentionTweetList, tweet);
-					userMention->info.mentionCount = userMention->info.mentionCount + 1; //Incrementa a contagem de menções
 
 					//Adiciona o usuario ao que o Tweet menciona
 					List_Add(tweet->mentionList, userMention);
+
+					//Incrementa o engamento do usuário ao ser mencionado
+					userMention->info.engagementCount = userMention->info.engagementCount + 1;
+
+					//Adiciona o possível novo usuário na árvore caso ainda não exista ou retorna o existente
+					AVL_insert(opes.AvlUserByMentionCount, NULL, userMention);
+					AVL_insert(opes.AvlUserByEngagementCount, NULL, userMention);
 
 					countMentionChar = -1; //Finaliza o contador de leitura da menção
 				} else { //Segue lendo o nome do usuario mencionado
@@ -177,8 +221,20 @@ OPES File_readTweets(FILE * file) {
 		//Le o numero de likes
 		tweet->likeCount = File_readInt(file);
 
+		//Adiciona o usuário ao Tweet
+		tweet->creator = user;
+
 		//Adiciona o Tweet a lista de tweets do usuario
 		User_AddTweet(user, tweet);
+
+		//Adiciona o usuário na árvore por contagem de Tweets
+		AVL_insert(opes.AvlUserByTweetCount, NULL, user);
+
+		//Adiciona o usuário na árvore por contagem de Retweets
+		AVL_insert(opes.AvlUserByRetweetCount, NULL, user);
+
+		//Adiciona o usuário na árvore por contagem de engajamento
+		AVL_insert(opes.AvlUserByEngagementCount, NULL, user);
 
 		//Adiciona o Tweet na sua árvore
 		AVL_insert(opes.AvlTweetByRetweetCount, NULL, tweet);

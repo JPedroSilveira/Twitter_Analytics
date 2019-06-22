@@ -1,9 +1,11 @@
-#include "./Header/TwitterAnalytics.h"
+﻿#include "./Header/TwitterAnalytics.h"
 
 int main(int argc, char *argv[]) {
+	
+	clock_t tInicio, tFim, tDecorrido;
 
-	AVL_testInt();
-	/*
+	tInicio = clock();
+
 	if (File_argumentsError(argc)) return 0;
 
 	FILE *file1, *file2, *OUTPUT;
@@ -16,13 +18,19 @@ int main(int argc, char *argv[]) {
 	if (File_filesError(file1, file2)) return 0;
 
 	OPES opes = File_readFiles(file1, file2);
-	
-	for (int x = 0; x < 7; x++) {
-		ArgumentsForOp* teste = List_Get(opes.opsArguments, x);
-		printf("%c\n", teste->opChar);
-		printf("%d\n", teste->number);
-		printf("%s\n", teste->name);
-	}*/
+
+	OPES_A_HashtagMaisCitadas(&opes);
+	OPES_B_UsuariosComMaisTweets(&opes);
+	OPES_C_TweetsComMaiorNumeroDeRetweets(&opes);
+	OPES_D_UsuariosMaisMencionados(&opes);
+	OPES_E_UsuariosMaisInfluentes(&opes);
+	OPES_G_TermosAssociados(&opes);
+
+	tFim = clock();
+
+	tDecorrido = ((tFim - tInicio) / (CLOCKS_PER_SEC / 1000));
+
+	printf("Tempo decorrido: %f", tDecorrido);
 
     return 0;
 }

@@ -1,8 +1,14 @@
+#ifndef _FILEH_
+#define _FILEH_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include "./OPES.h"
+#include "./Boolean.h"
+#include "./CharUtils.h"
+#include "./Tweet.h"
 
 #define BASE 10
 
@@ -23,4 +29,6 @@ List* File_readArgumentsForOp(FILE *file);
 int File_readInt(FILE *file);
 
 //Lê o arquivos dos Tweets
-OPES File_readTweets(FILE *file);
+OPES File_readTweets(OPES opes, FILE * file);
+
+#endif _FILEH_

@@ -1,3 +1,6 @@
+#ifndef _TWEETH_
+#define _TWEETH_
+
 #include <string.h>
 #include "./List.h"
 
@@ -6,10 +9,9 @@
 #define HASHTAG_NAME_LENGTH 50
 
 typedef struct s_UserInfo {
-	int tweetCount;
-	int mentionCount;
 	int retweetCount;
 	int likeCount;
+	int engagementCount;
 } UserInfo;
 
 UserInfo UserInfo_New();
@@ -27,7 +29,6 @@ User User_New();
 typedef struct s_HashTag {
 	char name[HASHTAG_NAME_LENGTH];
 	List* tweetList;
-	int tweetCount;
 } Hashtag;
 
 Hashtag* HashtagP_New();
@@ -45,3 +46,5 @@ Tweet* TweetP_New();
 
 //Funcoes compartilhadas
 void User_AddTweet(User* user, Tweet* tweet);
+
+#endif _TWEETH_
