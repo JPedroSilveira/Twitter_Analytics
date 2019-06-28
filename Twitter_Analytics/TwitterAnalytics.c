@@ -2,35 +2,43 @@
 
 int main(int argc, char *argv[]) {
 	
-	clock_t tInicio, tFim, tDecorrido;
+	setlocale(LC_ALL, "");
+
+	clock_t tInicio, tFim;
+	double tDecorrido;
 
 	tInicio = clock();
 
 	if (File_argumentsError(argc)) return 0;
 
-	FILE *file1, *file2, *OUTPUT;
+	FILE *file1, *file2, *output;
 
 	//file1 = fopen(argv[1], "r");
 	//file2 = fopen(argv[2], "r");
-	file1 = fopen("file1.txt", "r");
-	file2 = fopen("file2.txt", "r");
+	//output = fopen(argv[3], "r");
+	file1 = fopen("file1.csv", "r");
+	file2 = fopen("file2.csv", "r");
+	output = fopen("output.csv", "a");
 
-	if (File_filesError(file1, file2)) return 0;
+	if (File_filesError(file1, file2, output)) return 0;
 
 	OPES opes = File_readFiles(file1, file2);
 
-	OPES_A_HashtagMaisCitadas(&opes);
-	OPES_B_UsuariosComMaisTweets(&opes);
-	OPES_C_TweetsComMaiorNumeroDeRetweets(&opes);
-	OPES_D_UsuariosMaisMencionados(&opes);
-	OPES_E_UsuariosMaisInfluentes(&opes);
-	OPES_G_TermosAssociados(&opes);
+	File_executeOpes(&opes);
+
+	File_saveOpes(&opes, output);
 
 	tFim = clock();
 
-	tDecorrido = ((tFim - tInicio) / (CLOCKS_PER_SEC / 1000));
+	tDecorrido = ((tFim - tInicio) * 1000) / CLOCKS_PER_SEC;
 
-	printf("Tempo decorrido: %f", tDecorrido);
+	printf("Tempo decorrido em milissegundos: %lf \n", tDecorrido);
+
+	fclose(file1);
+	fclose(file2);
+	fclose(output);
+
+	system("pause");
 
     return 0;
 }

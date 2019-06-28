@@ -25,7 +25,7 @@ void* List_Get(List* self, int index);
 void List_Add(List*, void*);
 
 /*Adiciona um novo item a uma lista do tipo AssociatedHashtag em ordem decrescente*/
-void ListAssociatedHashtag_Add(List* list, AssociatedHashTag* data);
+void ListAssociatedHashtag_Add(List* list, AssociatedHashtag* data);
 
 /*Remove um item da lista, a mãe inicial deve ser a raiz da árvore*/
 void List_Remove(List* list, Node* mother, Node* nodeToRemove);

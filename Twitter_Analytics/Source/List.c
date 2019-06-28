@@ -31,7 +31,7 @@ void List_Add(List* list, void* data) {
 	list->length = list->length + 1;
 }
 
-void ListAssociatedHashtag_Add(List* list, AssociatedHashTag* data) {
+void ListAssociatedHashtag_Add(List* list, AssociatedHashtag* data) {
 	Node* node = (Node*)malloc(sizeof(Node));
 	node->data = data;
 	node->next = NULL;
@@ -41,10 +41,10 @@ void ListAssociatedHashtag_Add(List* list, AssociatedHashTag* data) {
 		list->header = node;
 	} else {
 		Node* mother = list->header;
-		AssociatedHashTag* aMother = mother->data;
+		AssociatedHashtag* aMother = mother->data;
 
 		Node* temp = mother;
-		AssociatedHashTag* aTemp = temp->data;
+		AssociatedHashtag* aTemp = temp->data;
 
 		//Procura o nodo para encaixar
 		while (temp != NULL && (aTemp->count > data->count || (aTemp->count == data->count && CompareUtils_String(data->name, aTemp->name) == ASSOCIATED_COMPARE_BIGGER))) {

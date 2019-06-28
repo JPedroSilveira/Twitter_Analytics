@@ -1,7 +1,7 @@
-#include "../Header//AssociatedHashtag.h"
+#include "../Header/AssociatedHashtag.h"
 
-AssociatedHashTag* AssociatedHashTag_New() {
-	AssociatedHashTag* aHashtag = (AssociatedHashTag*)malloc(sizeof(AssociatedHashTag));
+AssociatedHashtag* AssociatedHashtag_New() {
+	AssociatedHashtag* aHashtag = (AssociatedHashtag*)malloc(sizeof(AssociatedHashtag));
 	aHashtag->count = 0;
 
 	return aHashtag;

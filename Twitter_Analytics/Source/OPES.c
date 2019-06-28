@@ -5,21 +5,9 @@ ArgumentsForOp ArgumentsForOp_New() {
 	argumentsForOp.opChar = ' ';
 	argumentsForOp.number = 0;
 	argumentsForOp.name[0] = '\0'; //Inicializa a string vazia
+	argumentsForOp.result = List_New();
 
 	return argumentsForOp;
-}
-
-OPESResult OPESResult_New() {
-	OPESResult opesResult;
-	opesResult.associatedHashtags = List_New();
-	opesResult.hashtagsMaisCitadas = List_New();
-	opesResult.usuarioComMaisTweets = List_New();
-	opesResult.tweetsComMaisRetweets = List_New();
-	opesResult.usuariosMaisMencionados = List_New();
-	opesResult.usuariosMaisInfluentes = List_New();
-	opesResult.usuariosMaisEngajados = List_New();
-
-	return opesResult;
 }
 
 OPES OPES_New() {
@@ -32,7 +20,6 @@ OPES OPES_New() {
 	opes.AvlHashtagByTweetCount = AVL_newTreeHashtagByTweetCount();
 	opes.AvlHashtagByName = AVL_newTreeHashtagByName();
 	opes.AvlTweetByRetweetCount = AVL_newTreeTweetByRetweetCount();
-	opes.opesResult = OPESResult_New();
 
 	return opes;
 }
@@ -48,80 +35,77 @@ void ConvertTreeToListDesc(AvlTreeNode* mother, int* count, List* result) {
 	}
 }
 
-void OPES_A_HashtagMaisCitadas(OPES* opes) {
-	int count = ((ArgumentsForOp*)List_Get(opes->opsArguments, 0))->number;
+void OPES_A_HashtagMaisCitadas(OPES* opes, ArgumentsForOp* argument) {
+	int count = argument->number;
 	AvlTreeNode* root = opes->AvlHashtagByTweetCount->root;
 	if (root != NULL) {
 		if (count == 0) {
 			count = pow(2, root->height); //Count como árvore completa
 		}
-		ConvertTreeToListDesc(root, &count, opes->opesResult.hashtagsMaisCitadas);
+		ConvertTreeToListDesc(root, &count, argument->result);
 	}
 }
 
-void OPES_B_UsuariosComMaisTweets(OPES* opes) {
-	int count = ((ArgumentsForOp*)List_Get(opes->opsArguments, 1))->number;
+void OPES_B_UsuariosComMaisTweets(OPES* opes, ArgumentsForOp* argument) {
+	int count = argument->number;
 	AvlTreeNode* root = opes->AvlUserByTweetCount->root;
 	if (root != NULL) {
 		if (count == 0) {
 			count = pow(2, root->height); //Count como árvore completa
 		}
-		ConvertTreeToListDesc(root, &count, opes->opesResult.usuarioComMaisTweets);
+		ConvertTreeToListDesc(root, &count, argument->result);
 	}
 }
 
-void OPES_C_TweetsComMaiorNumeroDeRetweets(OPES * opes) {
-	int count = ((ArgumentsForOp*)List_Get(opes->opsArguments, 2))->number;
+void OPES_C_TweetsComMaiorNumeroDeRetweets(OPES * opes, ArgumentsForOp* argument) {
+	int count = argument->number;
 	AvlTreeNode* root = opes->AvlTweetByRetweetCount->root;
 	if (root != NULL) {
 		if (count == 0) {
 			count = pow(2, root->height); //Count como árvore completa
 		}
-		ConvertTreeToListDesc(root, &count, opes->opesResult.tweetsComMaisRetweets);
+		ConvertTreeToListDesc(root, &count, argument->result);
 	}
 }
 
-void OPES_D_UsuariosMaisMencionados(OPES * opes) {
-	int count = ((ArgumentsForOp*)List_Get(opes->opsArguments, 3))->number;
+void OPES_D_UsuariosMaisMencionados(OPES * opes, ArgumentsForOp* argument) {
+	int count = argument->number;
 	AvlTreeNode* root = opes->AvlUserByMentionCount->root;
 	if (root != NULL) {
 		if (count == 0) {
 			count = pow(2, root->height); //Count como árvore completa
 		}
-		ConvertTreeToListDesc(root, &count, opes->opesResult.usuariosMaisMencionados);
+		ConvertTreeToListDesc(root, &count, argument->result);
 	}
 }
 
-void OPES_E_UsuariosMaisInfluentes(OPES * opes) {
-	int count = ((ArgumentsForOp*)List_Get(opes->opsArguments, 4))->number;
+void OPES_E_UsuariosMaisInfluentes(OPES * opes, ArgumentsForOp* argument) {
+	int count = argument->number;
 	AvlTreeNode* root = opes->AvlUserByRetweetCount->root;
 	if (root != NULL) {
 		if (count == 0) {
 			count = pow(2, root->height); //Count como árvore completa
 		}
-		ConvertTreeToListDesc(root, &count, opes->opesResult.usuariosMaisInfluentes);
+		ConvertTreeToListDesc(root, &count, argument->result);
 	}
 }
 
-void OPES_F_UsuariosMaisEngajados(OPES * opes) {
-	int count = ((ArgumentsForOp*)List_Get(opes->opsArguments, 5))->number;
+void OPES_F_UsuariosMaisEngajados(OPES * opes, ArgumentsForOp* argument) {
+	int count = argument->number;
 	AvlTreeNode* root = opes->AvlUserByEngagementCount->root;
 	if (root != NULL) {
 		if (count == 0) {
 			count = pow(2, root->height); //Count como árvore completa
 		}
-		ConvertTreeToListDesc(root, &count, opes->opesResult.usuariosMaisEngajados);
+		ConvertTreeToListDesc(root, &count, argument->result);
 	}
 }
 
-void OPES_G_TermosAssociados(OPES* opes) {
-	//Verifica as Hashtags associadas
-	ArgumentsForOp* argumentG = ((ArgumentsForOp*)List_Get(opes->opsArguments, 6));
-
+void OPES_G_TermosAssociados(OPES* opes, ArgumentsForOp* argumentG) {
 	int countArgG = 0;
 	//Retira o # da hashtag 
 	do {
-		argumentG->name[countArgG] = CharUtils_toLowerCase(argumentG->name[countArgG + 1]);
+		argumentG->name[countArgG] = CharUtils_removeCharAccentToLowerCase(argumentG->name[countArgG + 1]);
 		countArgG++;
 	} while (argumentG->name[countArgG + 1] != '\0');
 
@@ -142,24 +126,24 @@ void OPES_G_TermosAssociados(OPES* opes) {
 				if (CompareUtils_String(aHashtag->name, gHashtag->name) != COMPARE_EQUAL) {
 					int isListed = false;
 					//Verificase ela já não está na lista
-					for (int z = 0; z < opes->opesResult.associatedHashtags->length; z++) {
-						AssociatedHashTag* listedAHashtag = List_Get(opes->opesResult.associatedHashtags, z);
-						if (CompareUtils_String(listedAHashtag->name, aHashtag) == COMPARE_EQUAL) {
+					for (int z = 0; z < argumentG->result->length; z++) {
+						AssociatedHashtag* listedAHashtag = List_Get(argumentG->result, z);
+						if (CompareUtils_String(listedAHashtag->name, aHashtag->name) == COMPARE_EQUAL) {
 							//Se ela já estiver na lista incrementa o número de vezes que apareceu e interrompe o laço
 							isListed = true;
-							List_RemoveByIndex(opes->opesResult.associatedHashtags, z);
+							List_RemoveByIndex(argumentG->result, z);
 							listedAHashtag->count = listedAHashtag->count + 1;
-							ListAssociatedHashtag_Add(opes->opesResult.associatedHashtags, listedAHashtag);
+							ListAssociatedHashtag_Add(argumentG->result, listedAHashtag);
 							break;
 						}
 					}
 
 					//Caso não esteja na lista cria um novo e adiciona
 					if (!isListed) {
-						AssociatedHashTag* newAHashtag = AssociatedHashTag_New();
+						AssociatedHashtag* newAHashtag = AssociatedHashtag_New();
 						strcpy(newAHashtag->name, aHashtag->name);
 						newAHashtag->count = 1;
-						ListAssociatedHashtag_Add(opes->opesResult.associatedHashtags, newAHashtag);
+						ListAssociatedHashtag_Add(argumentG->result, newAHashtag);
 					}
 				}
 			}

@@ -8,8 +8,8 @@ int File_argumentsError(int argc) {
 	else return 0;
 }
 
-int File_filesError(FILE *input1, FILE *input2, FILE *output) {
-	if (!input1 || !input2 || !output) { // Caso ocorra erro na abertura de um dos arquivos
+int File_filesError(FILE *input1, FILE *input2) {
+	if (!input1 || !input2) { // Caso ocorra erro na abertura de um dos arquivos
 		printf("Parametros invalidos\n");
 		return 1;
 	}
@@ -28,7 +28,7 @@ List* File_readArgumentsForOp(FILE *file) {
 	List* argumentsList = List_New();
 
 	char command, letter;
-	int count;
+	int count, number;
 
 	while ((command = getc(file)) != EOF) {
 		ArgumentsForOp* arguments = (ArgumentsForOp*)malloc(sizeof(ArgumentsForOp));
@@ -110,7 +110,7 @@ OPES File_readTweets(OPES opes, FILE * file) {
 		user->name[countChar + 1] = '\0'; //Finaliza a leitura do nome do usuario
 
 		//Adiciona o novo usuário na árvore caso ainda não exista ou retorna o existente
-		AvlTreeNode* userNode = AVL_insert(opes.AvlUserByName, NULL, user);
+		AvlTreeNode* userNode = (User*)AVL_insert(opes.AvlUserByName, NULL, user);
 		
 		if (!AVL_nodeIsEmpty(userNode)) {
 			user = userNode->key;
@@ -242,7 +242,8 @@ OPES File_readTweets(OPES opes, FILE * file) {
 	return opes;
 }
 
-void File_executeOpes(OPES* opes) {
+OPES File_executeOpes(OPES* opes)
+{
 	for (int x = 0; x < opes->opsArguments->length; x++) {
 		ArgumentsForOp* op = List_Get(opes->opsArguments, x);
 		switch (op->opChar) {
@@ -256,112 +257,62 @@ void File_executeOpes(OPES* opes) {
 			OPES_C_TweetsComMaiorNumeroDeRetweets(opes, op);
 			break;
 		case 'd':
-			OPES_D_UsuariosMaisMencionados(opes, op);
 			break;
 		case 'e':
-			OPES_E_UsuariosMaisInfluentes(opes, op);
 			break;
 		case 'f':
-			OPES_F_UsuariosMaisEngajados(opes, op);
 			break;
 		case 'g':
-			OPES_G_TermosAssociados(opes, op);
 			break;
 		default:
 			break;
 		}
 	}
+
+	return OPES();
 }
 
-void File_saveOpes(OPES* opes, FILE* output) {
-	for (int x = 0; x < opes->opsArguments->length; x++) {
-		ArgumentsForOp* op = List_Get(opes->opsArguments, x);
-		File_printOpData(op->opChar, output, op);
-	}
-}
+void File_exFile2(FILE *input2) {
+	/*
+	ArgumentsForOp arguments;
+	char op;
+	int qtt;
+	char s;
 
-void File_printOpData(char opChar, FILE* output, ArgumentsForOp* op) {
-	switch (opChar) {
-		case 'a':
-			fprintf(output, " --- OP A \n");
-			File_printOpA(output, op);
-			break;
-		case 'b':
-			fprintf(output, " --- OP B \n");
-			File_printOpB(output, op);
-			break;
-		case 'c':
-			fprintf(output, " --- OP C \n");
-			File_printOpC(output, op);
-			break;
-		case 'd':
-			fprintf(output, " --- OP D \n");
-			File_printOpD(output, op);
-			break;
-		case 'e':
-			fprintf(output, " --- OP E \n");
-			File_printOpE(output, op);
-			break;
-		case 'f':
-			fprintf(output, " --- OP F \n");
-			File_printOpF(output, op);
-			break;
-		case 'g':
-			fprintf(output, " --- OP G \n");
-			File_printOpG(output, op);
-			break;
-		default:
-			break;
-	}
-}
+	while ((s = getc(input2)) != EOF) { // Até o final do arquivo
+		arguments = readLine(input2);
 
-void File_printOpA(FILE* output, ArgumentsForOp* op) {
-	for (int x = 0; x < op->result->length; x++) {
-		Hashtag* hashtag = List_Get(op->result, x);
-		fprintf(output, "#%s, %d\n", hashtag->name, hashtag->tweetList->length);
-	}
-}
+		switch (arguments.opChar) {
+			case 'a':
 
-void File_printOpB(FILE* output, ArgumentsForOp* op) {
-	for (int x = 0; x < op->result->length; x++) {
-		User* user = List_Get(op->result, x);
-		fprintf(output, "@%s, %d\n", user->name, user->tweetList->length);
-	}
-}
+				break;
 
-void File_printOpC(FILE* output, ArgumentsForOp* op) {
-	for (int x = 0; x < op->result->length; x++) {
-		Tweet* tweet = List_Get(op->result, x);
-		fprintf(output, "%s, %d\n", tweet->text, tweet->reTweetCount);
-	}
-}
+			case 'b':
 
-void File_printOpD(FILE* output, ArgumentsForOp* op) {
-	for (int x = 0; x < op->result->length; x++) {
-		User* user = List_Get(op->result, x);
-		fprintf(output, "@%s, %d\n", user->name, user->mentionTweetList->length);
-	}
-}
+				break;
 
-void File_printOpE(FILE* output, ArgumentsForOp* op) {
-	for (int x = 0; x < op->result->length; x++) {
-		User* user = List_Get(op->result, x);
-		fprintf(output, "@%s, %d\n", user->name, user->info.retweetCount);
-	}
-}
+			case 'c':
 
-void File_printOpF(FILE* output, ArgumentsForOp* op) {
-	for (int x = 0; x < op->result->length; x++) {
-		User* user = List_Get(op->result, x);
-		fprintf(output, "@%s, %d\n", user->name, user->info.engagementCount);
-	}
-}
+				break;
 
-void File_printOpG(FILE* output, ArgumentsForOp* op) {
-	for (int x = 0; x < op->result->length; x++) {
-		AssociatedHashtag* aHashtag = List_Get(op->result, x);
-		fprintf(output, "#%s, %d\n", aHashtag->name, aHashtag->count);
+			case 'd':
+
+				break;
+
+			case 'e':
+
+				break;
+
+			case 'f':
+
+				break;
+
+			case 'g':
+
+				break;
+		}
 	}
+	*/
 }
 
 
