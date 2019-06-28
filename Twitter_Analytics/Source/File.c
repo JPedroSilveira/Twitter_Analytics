@@ -1,8 +1,8 @@
 #include "../Header/File.h"
 
 int File_argumentsError(int argc) {
-	if (argc > 3) {
-		printf("Mais de dois parametros\n");
+	if (argc != 3) {
+		printf("Diferente de três parametros\n");
 		return 1;
 	}
 	else return 0;
