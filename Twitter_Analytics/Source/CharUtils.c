@@ -70,3 +70,7 @@ char CharUtils_removeCharAccent(char l) {
 char CharUtils_toLowerCase(char l) {
 	return tolower(l);
 }
+
+char CharUtils_removeCharAccentToLowerCase(char l) {
+	return CharUtils_toLowerCase(CharUtils_removeCharAccent(l));
+}

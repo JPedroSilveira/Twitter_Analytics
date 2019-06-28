@@ -95,7 +95,7 @@ int CompareUtils_HashtagByName(Hashtag* a, Hashtag* b) {
 }
 
 int CompareUtils_TweetByReTweetCountAndText(Tweet* a, Tweet* b) {
-	int result = CompareUtils_Int(&(a->likeCount), &(b->likeCount));
+	int result = CompareUtils_Int(&(a->reTweetCount), &(b->reTweetCount));
 	if (result == COMPARE_EQUAL) {
 		result = CompareUtils_String(a->text, b->text);
 	}
