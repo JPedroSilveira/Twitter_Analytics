@@ -15,10 +15,13 @@
 /Twitter_Analytics/Twitter_Analytics.layout
 /Twitter_Analytics/Twitter_Analytics.vcxproj
 /Twitter_Analytics/Twitter_Analytics.vcxproj.filters
+/Twitter_Analytics/Twitter_Analytics.vcxproj.user
 /.vs
 /Twitter_Analytics.layout
 /Twitter_Analytics.sln
 
+/.idea
+/Twitter_Analytics/.idea
 
 ### CMake ###
 CMakeLists.txt.user
