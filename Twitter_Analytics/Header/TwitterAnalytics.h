@@ -6,7 +6,6 @@
 #include <locale.h>
 
 #include "./File.h"
-#include "./StringUtils.h"
 #include "./OPES.h"
 
 #endif _TWITTERANALYTICSH_
