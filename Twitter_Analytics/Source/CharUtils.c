@@ -1,5 +1,7 @@
 #include "..\Header\CharUtils.h"
 
+const char separator[] = { " ,.&*%\?!;/-'@\"$#=><()][}{:\n\t" };
+
 char CharUtils_removeCharAccent(char l) {
 	switch (l) {
 		case 'á':
@@ -73,4 +75,16 @@ char CharUtils_toLowerCase(char l) {
 
 char CharUtils_removeCharAccentToLowerCase(char l) {
 	return CharUtils_toLowerCase(CharUtils_removeCharAccent(l));
+}
+
+int isSeparator(char l) {
+	int count = 0;
+	while (separator[count] != '\0') {
+		if (separator[count] == l) {
+			return true;
+		}
+		count++;
+	}
+
+	return false;
 }

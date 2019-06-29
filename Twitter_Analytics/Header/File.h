@@ -9,6 +9,7 @@
 #include "./Boolean.h"
 #include "./CharUtils.h"
 #include "./Tweet.h"
+#include "./ClockUtils.h"
 
 #define BASE 10
 
@@ -39,6 +40,9 @@ void File_executeOpes(OPES* opes);
 
 //Salva o resultado das operações no arquivo de saída
 void File_saveOpes(OPES* opes, FILE* output);
+
+//Salva os tempos de execução no arquivo de saída
+void File_saveClocks(ClockControl cc, FILE* output);
 
 //Imprime o nome da operação padronizado no arquivo
 void File_printOpData(char opChar, FILE* output, ArgumentsForOp* op);

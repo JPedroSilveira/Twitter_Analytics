@@ -27,7 +27,7 @@ OPES File_readFiles(FILE* fileTweets, FILE* fileOps) {
 List* File_readArgumentsForOp(FILE *file) {
 	List* argumentsList = List_New();
 
-	char command, letter;
+	char command, char_;
 	int count;
 
 	while ((command = getc(file)) != EOF) {
@@ -40,15 +40,15 @@ List* File_readArgumentsForOp(FILE *file) {
 		if (arguments->opChar == 'g') { // Caso especial = operação G recebe uma hashtag (string)
 			arguments->number = 0;
 			count = 0;
-			letter = getc(file);
+			char_ = getc(file);
 
-			while (letter == ' ') { //Elimina espaço em branco
-				letter = getc(file);
+			while (char_ == ' ' || char_ == '#') { //Elimina espaço em branco e a hashtag
+				char_ = getc(file);
 			}
 
-			while (letter != '\n' && letter != ' ' && letter != EOF) { //Lê até achar o final
-				arguments->name[count] = CharUtils_removeCharAccentToLowerCase(letter);
-				letter = getc(file);
+			while (!isSeparator(char_) && char_ != EOF) { //Lê até achar o final
+				arguments->name[count] = CharUtils_removeCharAccentToLowerCase(char_);
+				char_ = getc(file);
 				count++;
 			}
 
@@ -74,7 +74,7 @@ int File_readInt(FILE *file) {
 int File_readIntAux(FILE *file, int *count) {
 	char character = getc(file);
 	int number;
-	if (character != '\n' && character != ' ' && character != ';' && character != EOF) { //Lê até achar o final
+	if (!isSeparator(character) && character != EOF) { //Lê até achar o final
 		number = File_readIntAux(file, count); //Chama recursivamente até o último caracter
 		number += ((character - 48) * pow(10, *count)); //Converte char ASCII para int e eleva para sua casa decimal somando ao valor total
 		*count = *count + 1; //Soma o contador para cada nova casa decimal
@@ -133,7 +133,7 @@ OPES File_readTweets(OPES opes, FILE * file) {
 				if (readChar == '#') { //Inicia leitura do nome da hashtag
 					hashtag = HashtagP_New(); //Inicializa uma nova hashtag
 					countHashtagChar = 0; //Zera o contador
-				} else if (readChar == ' ' || readChar == ';') { //Finaliza a leitura da hashtag
+				} else if (isSeparator(readChar)) { //Finaliza a leitura da hashtag
 					hashtag->name[countHashtagChar] = '\0';
 
 					//Busca a hashtag pelo nome
@@ -168,7 +168,7 @@ OPES File_readTweets(OPES opes, FILE * file) {
 				if (readChar == '@') { //Inicializa leitura do nome do usuário mencionado
 					userMention = UserP_New(); //Inicializa novo usuário mencionado
 					countMentionChar = 0; //Zera o contador para sua string nome
-				} else if (readChar == ' ' || readChar ==  ';') { //Finaliza leitura
+				} else if (isSeparator(readChar)) { //Finaliza leitura
 					userMention->name[countMentionChar] = '\0';
 
 					//Busca o usuário pelo nome
@@ -278,6 +278,12 @@ void File_saveOpes(OPES* opes, FILE* output) {
 		ArgumentsForOp* op = List_Get(opes->opsArguments, x);
 		File_printOpData(op->opChar, output, op);
 	}
+}
+
+void File_saveClocks(ClockControl cc, FILE* output) {
+	fprintf(output, "Tempo para a abertura e leitura dos arquivos de entrada em milissegundos: %lfms\n", ClockUtils_readDiff(cc));
+	fprintf(output, "Tempo para a execução das operaçõe em milissegundos: %lfms\n", ClockUtils_executeOPDiff(cc));
+	fprintf(output, "Tempo total para a execução da aplicação: %lfms\n", ClockUtils_mainDiff(cc));
 }
 
 void File_printOpData(char opChar, FILE* output, ArgumentsForOp* op) {

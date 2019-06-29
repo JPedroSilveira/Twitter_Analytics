@@ -4,9 +4,9 @@
 #include <time.h>
 
 typedef struct s_ClockControl {
-	clock_t mainStart, mainEnd, mainDiff;
-	clock_t readStart, readEnd, readDiff;
-	clock_t executeOPStart, executeOPEnd, executeOPDiff;
+	clock_t mainStart, mainEnd;
+	clock_t readStart, readEnd;
+	clock_t executeOPStart, executeOPEnd;
 } ClockControl;
 
 void ClockUtils_mainStart(ClockControl* cc);

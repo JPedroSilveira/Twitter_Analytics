@@ -42,6 +42,8 @@ int main(int argc, char *argv[]) {
 
 	printf("Tempo decorrido em milissegundos: %lf \n", ClockUtils_mainDiff(clockControl));
 
+	File_saveClocks(clockControl, output);
+
 	fclose(file1);
 	fclose(file2);
 	fclose(output);

@@ -8,7 +8,6 @@
 #include "./File.h"
 #include "./StringUtils.h"
 #include "./OPES.h"
-#include "./ClockUtils.h"
 
 #endif _TWITTERANALYTICSH_
 

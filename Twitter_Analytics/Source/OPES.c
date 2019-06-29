@@ -103,13 +103,6 @@ void OPES_F_UsuariosMaisEngajados(OPES * opes, ArgumentsForOp* argument) {
 
 void OPES_G_TermosAssociados(OPES* opes, ArgumentsForOp* argumentG) {
 	int countArgG = 0;
-	//Retira o # da hashtag 
-	do {
-		argumentG->name[countArgG] = CharUtils_removeCharAccentToLowerCase(argumentG->name[countArgG + 1]);
-		countArgG++;
-	} while (argumentG->name[countArgG + 1] != '\0');
-
-	argumentG->name[countArgG] = '\0';
 
 	AvlTreeNode* gHashtagNode = AVL_get(opes->AvlHashtagByName, argumentG->name);
 
