@@ -34,10 +34,15 @@ List* File_readArgumentsForOp(FILE *file) {
 		ArgumentsForOp* arguments = (ArgumentsForOp*)malloc(sizeof(ArgumentsForOp));
 		*arguments = ArgumentsForOp_New();
 
+		//Le ate achar o proximo caractere valido
+		while (isSeparator(command)) {
+			command = getc(file);
+		}
+
 		arguments->opChar = CharUtils_removeCharAccentToLowerCase(command); // char comando
 		getc(file); // pula o ;
 
-		if (arguments->opChar == 'g') { // Caso especial = operação G recebe uma hashtag (string)
+		if (arguments->opChar == 'g') { // Caso especial = operação G recebe uma hashtag (string) e possui CSV desnormalizado
 			arguments->number = 0;
 			count = 0;
 			char_ = getc(file);
@@ -54,8 +59,10 @@ List* File_readArgumentsForOp(FILE *file) {
 
 			//Finaliza a string
 			arguments->name[count] = '\0';
-		}
-		else {
+
+			//Le o numero de itens a ser analisado
+			arguments->number = File_readInt(file);
+		} else {
 			strcpy(arguments->name, "");
 			arguments->number = File_readInt(file);
 		}
@@ -87,7 +94,7 @@ int File_readIntAux(FILE *file, int *count) {
 
 OPES File_readTweets(OPES opes, FILE * file) {
 	char readChar;
-	int countChar, countHashtagChar = -1, countMentionChar = -1, number = 0, isAssociated = 0;
+	int countChar, countHashtagChar = -1, countMentionChar = -1;
 
 	while ((readChar = getc(file)) != EOF) {
 		Tweet* tweet = TweetP_New();
@@ -111,7 +118,7 @@ OPES File_readTweets(OPES opes, FILE * file) {
 
 		//Adiciona o novo usuário na árvore caso ainda não exista ou retorna o existente
 		AvlTreeNode* userNode = AVL_insert(opes.AvlUserByName, NULL, user);
-		
+
 		if (!AVL_nodeIsEmpty(userNode)) {
 			user = userNode->key;
 
@@ -158,7 +165,7 @@ OPES File_readTweets(OPES opes, FILE * file) {
 
 					//Adiciona a nova hashtag na árvore
 					AVL_insert(opes.AvlHashtagByTweetCount, NULL, hashtag);
-					
+
 					countHashtagChar = -1; //Finaliza o contador de leitura da hashtag
 				} else { //Segue lendo o nome da hashtag
 					hashtag->name[countHashtagChar] = CharUtils_removeCharAccentToLowerCase(readChar);
@@ -238,7 +245,7 @@ OPES File_readTweets(OPES opes, FILE * file) {
 		//Adiciona o Tweet na sua árvore
 		AVL_insert(opes.AvlTweetByRetweetCount, NULL, tweet);
 	}
-	
+
 	return opes;
 }
 
@@ -364,9 +371,18 @@ void File_printOpF(FILE* output, ArgumentsForOp* op) {
 }
 
 void File_printOpG(FILE* output, ArgumentsForOp* op) {
+	int count = op->number - 1;
+	int useCount = count != -1;
 	for (int x = 0; x < op->result->length; x++) {
 		AssociatedHashtag* aHashtag = List_Get(op->result, x);
 		fprintf(output, "#%s, %d\n", aHashtag->name, aHashtag->count);
+		if(useCount){
+            if(count == 0){
+                x = op->result->length;
+            } else {
+                count--;
+            }
+        }
 	}
 }
 

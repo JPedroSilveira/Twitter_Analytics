@@ -102,8 +102,6 @@ void OPES_F_UsuariosMaisEngajados(OPES * opes, ArgumentsForOp* argument) {
 }
 
 void OPES_G_TermosAssociados(OPES* opes, ArgumentsForOp* argumentG) {
-	int countArgG = 0;
-
 	AvlTreeNode* gHashtagNode = AVL_get(opes->AvlHashtagByName, argumentG->name);
 
 	if (!AVL_nodeIsEmpty(gHashtagNode)) {
